@@ -3,7 +3,7 @@ import {
     View, Text, FlatList, StyleSheet, TouchableOpacity, Image
 } from 'react-native';
 import { SearchBar } from 'antd-mobile-rn';
-import { Actions } from 'react-native-router-flux';
+import NumberInput from '../components/number-input';
 
 const styles = StyleSheet.create({
     cateItem: {
@@ -22,9 +22,10 @@ const data = Array.from({ length: 20 }).map((item, index) => Object.assign({
     key: `key-${index}`,
     name: `name-${index + 1}`
 }));
-const load = cate => Array.from({ length: 30 }).map((item, index) => Object.assign({
+const load = cate => Array.from({ length: 20 }).map((item, index) => Object.assign({
     key: `key-${index}-${cate.key}`,
-    name: `name-${index + 1}-${cate.name}`
+    name: `name-${index + 1}-${cate.name}`,
+    img: 'https://facebook.github.io/react/logo-og.png'
 }));
 export default class Home extends Component {
     constructor (props) {
@@ -39,16 +40,21 @@ export default class Home extends Component {
         this.setState({ currentCate: item.key, goods: load(item) });
     }
 
+    pull () {
+        console.log(this.state);
+    }
+
     render () {
         const { currentCate, goods } = this.state;
         return (
             <View>
                 <SearchBar placeholder="搜索" />
                 <View style={{ flexDirection: 'row', marginBottom: 89 }}>
-                    <View style={{ backgroundColor: '#F5F5F5' }}>
+                    <View style={{ backgroundColor: '#F5F5F5', marginRight: 8 }}>
                         <FlatList
                             data={data}
                             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#eee' }} />}
+                            onEndReached={() => this.pull()}
                             renderItem={({ item }) => (
                                 <TouchableOpacity style={[styles.cateItem, currentCate === item.key ? styles.cateItemSelect : { backgroundColor: 'white' }]} onPress={() => this.selectCateHandler(item)}>
                                     <Text style={{ fontSize: 13, color: currentCate === item.key ? 'red' : '#333' }}>{item.name}</Text>
@@ -56,23 +62,21 @@ export default class Home extends Component {
                             )}
                         />
                     </View>
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, paddingRight: 4 }}>
                         <FlatList
                             data={goods}
-                            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#eee' }} />}
+                            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#ddd', marginVertical: 8 }} />}
                             renderItem={({ item }) => (
                                 <View style={{ flex: 1, flexDirection: 'row' }}>
-                                    <View style={{ width: 60 }}>
-                                        <Image />
+                                    <View style={{ width: 60, marginRight: 8, borderRadius: 5 }}>
+                                        <Image source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} style={{ height: 60 }} />
                                     </View>
-                                    <View style={{ flex: 1 }}>
-                                        <Text>{item.name}</Text>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text>￥0.10</Text>
-                                            <View style={{ marginRight: 'auto' }}>
-                                                <Text>
-                                                +
-                                                </Text>
+                                    <View style={{ flex: 1, justifyContent: 'space-between' }}>
+                                        <Text style={{ fontSize: 20 }}>{item.name}</Text>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                                            <Text style={{ fontSize: 12, color: 'red' }}>￥0.10</Text>
+                                            <View style={{}}>
+                                                <NumberInput min={0} />
                                             </View>
                                         </View>
                                     </View>
@@ -80,6 +84,13 @@ export default class Home extends Component {
                             )}
                         />
                     </View>
+                </View>
+                <View style={{
+                    height: 60,
+                    backgroundColor: 'red'
+                }}
+                >
+                    <Text>bottom</Text>
                 </View>
             </View>
         );
