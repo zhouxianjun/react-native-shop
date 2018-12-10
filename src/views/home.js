@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     View, Text, FlatList, StyleSheet, TouchableOpacity, Image
 } from 'react-native';
+import { inject } from 'mobx-react';
 import { SearchBar } from 'antd-mobile-rn';
 import NumberInput from '../components/number-input';
 
@@ -27,7 +28,9 @@ const load = cate => Array.from({ length: 20 }).map((item, index) => Object.assi
     name: `name-${index + 1}-${cate.name}`,
     img: 'https://facebook.github.io/react/logo-og.png'
 }));
-export default class Home extends Component {
+
+@inject(['UserStore'])
+class Home extends Component {
     constructor (props) {
         super(props);
         this.state = {
@@ -96,3 +99,5 @@ export default class Home extends Component {
         );
     }
 }
+
+export default Home;
