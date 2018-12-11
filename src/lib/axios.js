@@ -3,11 +3,12 @@ import merge from 'lodash.merge';
 import { Actions } from 'react-native-router-flux';
 import { Toast } from 'antd-mobile-rn';
 import { UserStore } from '../store';
+import HttpError from './HttpError';
 
 const DEFAULT_CONFIG = { showError: true, loading: false };
 
 axios.defaults.baseURL = process.env.BASE_URL;
-console.log(axios.defaults.baseURL);
+console.log('BASE_URL:', axios.defaults.baseURL);
 axios.interceptors.request.use((config) => {
     const { session } = UserStore;
     return merge({
@@ -22,10 +23,9 @@ axios.interceptors.request.use((config) => {
     config);
 });
 axios.interceptors.response.use(async (res) => {
-    console.log(res);
     const data = { success: false, ...res.data };
     if (!data.success) {
-        throw new URIError(data.msg || '操作失败!');
+        throw new HttpError(data.msg || '操作失败!', res, data);
     }
     return data;
 });
@@ -49,8 +49,10 @@ export const fetch = async (url, config = DEFAULT_CONFIG) => {
         if (loading !== false) {
             Toast.hide();
         }
+        console.log(url, config, response);
         return response;
     } catch (err) {
+        console.warn(err);
         if (global.LoadingBar) {
             global.LoadingBar.error();
         }

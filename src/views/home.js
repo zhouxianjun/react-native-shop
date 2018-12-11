@@ -39,8 +39,8 @@ class Home extends Component {
     }
 
     async componentDidMount () {
-        const { UserStore: [member] } = this.state;
-        if (member) {
+        const { UserStore } = this.props;
+        if (UserStore.member) {
             await this.loadAllCategory();
         }
     }

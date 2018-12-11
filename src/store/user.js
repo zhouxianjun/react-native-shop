@@ -35,8 +35,17 @@ class UserStore {
     }
 
     @action
+    async isLogin () {
+        if (!this.member) {
+            const result = await this.loadAuthInfo();
+            return !!result;
+        }
+        return true;
+    }
+
+    @action
     async loadAuthInfo () {
-        const result = await get('/info');
+        const result = await get('/info', {}, { showError: false });
         if (result.success) {
             this.member = result.value;
             this.specialGoodsCategory = result.data.specialGoodsCategory;
@@ -46,5 +55,4 @@ class UserStore {
     }
 }
 
-const store = new UserStore();
-export default store;
+export default new UserStore();
