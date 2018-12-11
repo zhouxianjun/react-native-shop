@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Router, Stack, Scene, Modal, Actions
+    Router, Stack, Scene, Modal, Actions, ActionConst
 } from 'react-native-router-flux';
 import { TouchableOpacity } from 'react-native';
 import { Provider } from 'mobx-react';
@@ -15,7 +15,7 @@ export default function () {
         <Provider {...store}>
             <Router>
                 <Modal key="root" hideNavBar>
-                    <Stack key="common">
+                    <Stack key="common" type={ActionConst.REPLACE}>
                         <Scene
                             key="home"
                             component={Home}
@@ -27,6 +27,11 @@ export default function () {
                                     <Icon style={{ marginRight: 10 }} name="user" size={18} />
                                 </TouchableOpacity>
                             )}
+                            on={() => {
+                                console.log(!!UserStore.member);
+                                return !!UserStore.member;
+                            }}
+                            failure="login"
                             icon={() => <Icon name="home" size={20} />}
                         />
                         <Scene
@@ -38,7 +43,7 @@ export default function () {
                             icon={() => <Icon name="user" size={20} />}
                         />
                     </Stack>
-                    <Stack key="login" title="登录">
+                    <Stack key="login" title="登录" type={ActionConst.REPLACE}>
                         <Scene key="loginMan" component={Login} />
                     </Stack>
                 </Modal>

@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 import { AsyncStorage } from 'react-native';
 import { get } from '../lib/axios';
 
@@ -24,17 +24,25 @@ class UserStore {
         }
     }
 
+    @action
     async login () {
         this.session = {
             openid: 'o_tzEwA3ZqkECZnv0gSxDiMCh86I',
             sign: '6549af63029eff791d1a18d44a8a6027',
             code: '731H0001'
         };
+        return this.loadAuthInfo();
     }
 
+    @action
     async loadAuthInfo () {
         const result = await get('/info');
-        console.log(result);
+        if (result.success) {
+            this.member = result.value;
+            this.specialGoodsCategory = result.data.specialGoodsCategory;
+            return this.member;
+        }
+        return null;
     }
 }
 

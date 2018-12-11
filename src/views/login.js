@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { InputItem, List, Button } from 'antd-mobile-rn';
+import { inject } from 'mobx-react';
+import { Actions } from 'react-native-router-flux';
 
-export default class Login extends Component {
+@inject(['UserStore'])
+class Login extends Component {
     constructor (props) {
         super(props);
         this.state = {
@@ -11,9 +14,14 @@ export default class Login extends Component {
         };
     }
 
-    loginHandler () {
+    async loginHandler () {
         const { username, password } = this.state;
         console.log(username, password);
+        const { UserStore } = this.props;
+        const result = await UserStore.login();
+        if (result) {
+            Actions.replace('home');
+        }
     }
 
     render () {
@@ -23,8 +31,10 @@ export default class Login extends Component {
                     <InputItem placeholder="用户名" onChange={username => this.setState({ username })} />
                     <InputItem type="password" placeholder="密码" onChange={password => this.setState({ password })} />
                 </List>
-                <Button onClick={() => this.loginHandler()} />
+                <Button onClick={() => this.loginHandler()}>登录</Button>
             </View>
         );
     }
 }
+
+export default Login;

@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import {
     View, Text, FlatList, StyleSheet, TouchableOpacity, Image
 } from 'react-native';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { SearchBar } from 'antd-mobile-rn';
+import { get } from '../lib/axios';
 import NumberInput from '../components/number-input';
 
 const styles = StyleSheet.create({
@@ -19,10 +20,6 @@ const styles = StyleSheet.create({
         borderLeftColor: 'red'
     }
 });
-const data = Array.from({ length: 20 }).map((item, index) => Object.assign({
-    key: `key-${index}`,
-    name: `name-${index + 1}`
-}));
 const load = cate => Array.from({ length: 20 }).map((item, index) => Object.assign({
     key: `key-${index}-${cate.key}`,
     name: `name-${index + 1}-${cate.name}`,
@@ -30,17 +27,33 @@ const load = cate => Array.from({ length: 20 }).map((item, index) => Object.assi
 }));
 
 @inject(['UserStore'])
+@observer
 class Home extends Component {
     constructor (props) {
         super(props);
         this.state = {
             currentCate: null,
+            categorys: [],
             goods: []
         };
     }
 
+    async componentDidMount () {
+        const { UserStore: [member] } = this.state;
+        if (member) {
+            await this.loadAllCategory();
+        }
+    }
+
     selectCateHandler (item) {
         this.setState({ currentCate: item.key, goods: load(item) });
+    }
+
+    async loadAllCategory () {
+        const result = await get('/api/shop/index/category');
+        const categorys = result.value || [];
+        this.setState({ categorys });
+        return categorys;
     }
 
     pull () {
@@ -48,16 +61,16 @@ class Home extends Component {
     }
 
     render () {
-        const { currentCate, goods } = this.state;
+        const { currentCate, categorys, goods } = this.state;
         return (
             <View>
                 <SearchBar placeholder="搜索" />
                 <View style={{ flexDirection: 'row', marginBottom: 89 }}>
                     <View style={{ backgroundColor: '#F5F5F5', marginRight: 8 }}>
                         <FlatList
-                            data={data}
+                            data={categorys}
                             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#eee' }} />}
-                            onEndReached={() => this.pull()}
+                            keyExtractor={item => `cate-${item.id}`}
                             renderItem={({ item }) => (
                                 <TouchableOpacity style={[styles.cateItem, currentCate === item.key ? styles.cateItemSelect : { backgroundColor: 'white' }]} onPress={() => this.selectCateHandler(item)}>
                                     <Text style={{ fontSize: 13, color: currentCate === item.key ? 'red' : '#333' }}>{item.name}</Text>
@@ -68,6 +81,7 @@ class Home extends Component {
                     <View style={{ flex: 1, paddingRight: 4 }}>
                         <FlatList
                             data={goods}
+                            onEndReached={() => this.pull()}
                             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#ddd', marginVertical: 8 }} />}
                             renderItem={({ item }) => (
                                 <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -87,13 +101,6 @@ class Home extends Component {
                             )}
                         />
                     </View>
-                </View>
-                <View style={{
-                    height: 60,
-                    backgroundColor: 'red'
-                }}
-                >
-                    <Text>bottom</Text>
                 </View>
             </View>
         );
