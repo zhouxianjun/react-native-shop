@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import { AsyncStorage } from 'react-native';
-import { get } from '../lib/axios';
+import axios from 'axios';
 
 class UserStore {
     @observable
@@ -45,7 +45,7 @@ class UserStore {
 
     @action
     async loadAuthInfo () {
-        const result = await get('/info', {}, { showError: false });
+        const result = await axios('/info', {});
         if (result.success) {
             this.member = result.value;
             this.specialGoodsCategory = result.data.specialGoodsCategory;

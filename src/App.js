@@ -4,6 +4,7 @@ import {
 } from 'react-native-router-flux';
 import { TouchableOpacity } from 'react-native';
 import { Provider } from 'mobx-react';
+import { Toast } from 'antd-mobile-rn';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import store, { UserStore } from './store';
 import Launch from './views/launch';
@@ -11,10 +12,23 @@ import Login from './views/login';
 import Home from './views/home';
 import User from './views/user';
 
+let lastBackPressed = 0;
 export default function () {
     return (
         <Provider {...store}>
-            <Router>
+            <Router backAndroidHandler={() => {
+                if (Actions.currentScene !== 'home') {
+                    Actions.pop();
+                    return true;
+                }
+                if (lastBackPressed + 2000 >= Date.now()) {
+                    return false;
+                }
+                lastBackPressed = Date.now();
+                Toast.info('再按一次退出应用');
+                return true;
+            }}
+            >
                 <Scene key="root" hideNavBar headerMode="screen">
                     <Scene component={Launch} on={() => UserStore.isLogin()} success="app" failure="login" />
                     <Stack key="app" type={ActionConst.RESET}>
