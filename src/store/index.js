@@ -1,6 +1,8 @@
 import UserStore from './user';
+import ShoppingCartStore from './shopping-cart';
 
-export { UserStore };
+export { UserStore, ShoppingCartStore };
 export default {
-    UserStore
+    UserStore,
+    ShoppingCartStore
 };

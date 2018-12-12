@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-    Router, Stack, Scene, Actions, ActionConst
+    Router, Stack, Scene, Actions, ActionConst, Tabs
 } from 'react-native-router-flux';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { Provider } from 'mobx-react';
 import { Toast } from 'antd-mobile-rn';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -11,6 +11,7 @@ import Launch from './views/launch';
 import Login from './views/login';
 import Home from './views/home';
 import User from './views/user';
+import ShoppingCart from './components/shopping-cart';
 
 let lastBackPressed = 0;
 export default function () {
@@ -32,24 +33,29 @@ export default function () {
                 <Scene key="root" hideNavBar headerMode="screen">
                     <Scene component={Launch} on={() => UserStore.isLogin()} success="app" failure="login" />
                     <Stack key="app" type={ActionConst.RESET}>
-                        <Scene
+                        <Tabs
                             key="home"
-                            component={Home}
-                            title="首页"
-                            type="reset"
-                            titleStyle={{ alignSelf: 'center', justifyContent: 'center' }}
-                            renderRightButton={() => (
-                                <TouchableOpacity onPress={() => Actions.user()}>
-                                    <Icon style={{ marginRight: 10 }} name="user" size={18} />
-                                </TouchableOpacity>
-                            )}
-                            icon={() => <Icon name="home" size={20} />}
-                        />
+                            hideNavBar
+                            tabBarComponent={ShoppingCart}
+                        >
+                            <Scene
+                                key="_home"
+                                component={Home}
+                                tabs
+                                title="首页"
+                                titleStyle={{ alignSelf: 'center', justifyContent: 'center' }}
+                                renderRightButton={() => (
+                                    <TouchableOpacity onPress={() => Actions.user()}>
+                                        <Icon style={{ marginRight: 10 }} name="user" size={18} />
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        </Tabs>
+
                         <Scene
                             key="user"
                             component={User}
                             title="我的"
-                            icon={() => <Icon name="user" size={20} />}
                         />
                     </Stack>
                     <Stack key="login" title="登录" type={ActionConst.RESET}>

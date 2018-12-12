@@ -131,7 +131,7 @@ class Home extends Component {
                                         <Image source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} style={{ height: 60 }} />
                                     </View>
                                     <View style={{ flex: 1, justifyContent: 'space-between' }}>
-                                        <Text style={{ fontSize: 20 }}>{item.name}</Text>
+                                        <Text style={{ fontSize: 16 }}>{item.name}</Text>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                                             <Text style={{ fontSize: 12, color: 'red' }}>￥0.10</Text>
                                             <View style={{}}>
