@@ -29,6 +29,7 @@ module.exports = {
         "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
         "comma-dangle": ["error", "never"],
         "react/jsx-one-expression-per-line": 0,
+        "react/forbid-prop-types": 0,
         "max-len": 0,
         "space-before-function-paren": ["error", "always"],
         "no-return-assign": 0,

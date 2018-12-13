@@ -37,3 +37,9 @@ export const ForceDecimal = (num, count = 2) => {
 };
 
 export const ForceMoney = num => ForceDecimal(num / 100);
+
+/**
+ * 转换图片地址
+ * @param {String} url 原地址
+ */
+export const transformImgUrl = url => `${process.env.IMG_ADDRESS}${url}`;

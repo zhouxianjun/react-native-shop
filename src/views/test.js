@@ -14,7 +14,11 @@ function load (pageNum) {
                     isLastPage: pageNum >= 3,
                     list: Array.from({ length: pageNum >= 3 ? 5 : 10 }).map((item, index) => ({
                         id: `${pageNum}-${index}`,
-                        name: `test-${pageNum}-${index}`
+                        name: `test-${pageNum}-${index}`,
+                        unitIds: '11',
+                        unitNames: '250ml',
+                        unitPictures: 'imgs/2540a6aa90fb84b3f6d965143d3e20270c5664e3.jpg',
+                        unitPrices: '300'
                     }))
                 }
             });

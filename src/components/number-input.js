@@ -8,21 +8,21 @@ export default class NumberInput extends PureComponent {
         min: PropTypes.number,
         max: PropTypes.number,
         step: PropTypes.number,
+        value: PropTypes.number,
         onChange: PropTypes.func
     }
 
     static defaultProps = {
-        min: Number.MIN_SAFE_INTEGER,
-        max: Number.MAX_SAFE_INTEGER,
+        min: -Infinity,
+        max: Infinity,
         step: 1,
+        value: 0,
         onChange: () => {}
     }
 
-    constructor (props) {
-        super(props);
-        this.state = {
-            value: 0
-        };
+    constructor ({ value }) {
+        super();
+        this.state = { value };
     }
 
     stepBy (step) {
