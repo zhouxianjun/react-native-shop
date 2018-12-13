@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Router, Stack, Scene, Actions, ActionConst, Tabs
 } from 'react-native-router-flux';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { Provider } from 'mobx-react';
 import { Toast } from 'antd-mobile-rn';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';

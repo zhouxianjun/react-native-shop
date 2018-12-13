@@ -1,6 +1,7 @@
 /** @format */
 
 import { AppRegistry, YellowBox } from 'react-native';
+import './src/lib/global';
 import Step from './src/step';
 import { name as appName } from './app.json';
 

@@ -10,7 +10,9 @@ import { Modal } from 'antd-mobile-rn';
 import GoodsItem from './goods-item';
 import { get } from '../lib/axios';
 import NumberInput from './number-input';
-import { collectionForVo, ForceMoney, transformImgUrl } from '../lib/common';
+import {
+    collectionForVo, ForceMoney, transformImgUrl, isIphoneX
+} from '../lib/common';
 
 @inject(['ShoppingCartStore'])
 @observer
@@ -118,17 +120,38 @@ class GoodsListView extends Component {
         }
     }
 
+    changeUnit (chooseUnit) {
+        this.setState({ chooseUnit });
+    }
+
     render () {
         const {
             refreshState, chooseUnitShow, chooseUnit, currentUnits
         } = this.state;
         return (
-            <View>
-                <Modal popup style={{ paddingHorizontal: 6 }} visible={chooseUnitShow} maskClosable onClose={this.closeChoose} animationType="slide-up">
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={{ flex: 1 }}>
+                <Modal
+                    popup
+                    style={{ paddingHorizontal: px2dp(8), paddingBottom: isIphoneX ? px2dp(60) : 0 }}
+                    visible={chooseUnitShow}
+                    maskClosable
+                    onClose={this.closeChoose}
+                    animationType="slide-up"
+                >
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingVertical: px2dp(4)
+                    }}
+                    >
                         <View style={{ flexDirection: 'row' }}>
-                            <Image source={{ uri: transformImgUrl(chooseUnit.picture) }} resizeMode="contain" style={{ height: 50, width: 50 }} />
-                            <View style={{ justifyContent: 'center', marginLeft: 10 }}>
+                            <Image
+                                source={{ uri: transformImgUrl(chooseUnit.picture) }}
+                                resizeMode="contain"
+                                style={{ height: px2dp(120), width: px2dp(120) }}
+                            />
+                            <View style={{ justifyContent: 'center', marginLeft: px2dp(10) }}>
                                 <Text>{chooseUnit.name}</Text>
                             </View>
                         </View>
@@ -138,12 +161,28 @@ class GoodsListView extends Component {
                     <View>
                         <View style={{ flexDirection: 'row' }}>
                             {currentUnits.map(u => (
-                                <TouchableOpacity key={`choose-unit-${u.id}`}>
-                                    <Text>{u.name}</Text>
+                                <TouchableOpacity
+                                    key={`choose-unit-${u.id}`}
+                                    onPress={() => this.changeUnit(u)}
+                                    style={{
+                                        backgroundColor: chooseUnit.id === u.id ? '#ff4081' : 'gray',
+                                        paddingHorizontal: px2dp(10),
+                                        paddingVertical: px2dp(6),
+                                        borderRadius: 25,
+                                        marginHorizontal: px2dp(6),
+                                        marginVertical: px2dp(8)
+                                    }}
+                                >
+                                    <Text style={{ color: chooseUnit.id === u.id ? '#fff' : '#000' }}>{u.name}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginTop: px2dp(10)
+                        }}
+                        >
                             <Text>数量</Text>
                             <NumberInput />
                         </View>
@@ -156,7 +195,7 @@ class GoodsListView extends Component {
                     onHeaderRefresh={this.refresh}
                     onFooterRefresh={this.pull}
                     footerNoMoreDataComponent={<View />}
-                    ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#ddd' }} />}
+                    ItemSeparatorComponent={() => <View style={{ height: px2dp(1), backgroundColor: '#ddd' }} />}
                     keyExtractor={item => `goods-${item.goodsId}`}
                     renderItem={({ item }) => <GoodsItem unit={item} onChoose={this.chooseHandler} />}
                 />

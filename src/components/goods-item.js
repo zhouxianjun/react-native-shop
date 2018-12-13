@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import {
+    View, Text, TouchableOpacity, Image
+} from 'react-native';
 import { CachedImage } from 'react-native-img-cache';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
@@ -57,39 +59,51 @@ class GoodsItem extends Component {
         const { quantity, max } = this.state;
         return (
             <View style={{
-                flex: 1, flexDirection: 'row', paddingHorizontal: 4, paddingVertical: 8
+                flex: 1,
+                flexDirection: 'row',
+                paddingHorizontal: px2dp(6),
+                paddingVertical: px2dp(10)
             }}
             >
-                <View style={{ width: 60, marginRight: 8, borderRadius: 5 }}>
-                    <CachedImage source={{ uri: transformImgUrl(unit.picture) }} resizeMode="contain" style={{ height: 60 }} />
+                <View style={{ marginRight: px2dp(10), borderRadius: 5 }}>
+                    <Image
+                        source={{ uri: transformImgUrl(unit.picture) }}
+                        resizeMode="contain"
+                        style={{ height: px2dp(120), width: px2dp(120) }}
+                    />
                 </View>
                 <View style={{ flex: 1, justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 16 }}>{unit.title}</Text>
+                    <Text style={{ fontSize: fontSize(14) }}>{unit.title}</Text>
                     {
                         unit.choose ? (
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                                <Text style={{ fontSize: 12, color: 'crimson' }}>￥{ForceMoney(unit.price)}</Text>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'flex-end'
+                            }}
+                            >
+                                <Text style={{ fontSize: fontSize(12), color: 'crimson' }}>￥{ForceMoney(unit.price)}</Text>
                                 <TouchableOpacity
                                     onPress={this.chooseHandler}
                                     style={{
                                         backgroundColor: '#ff4081',
                                         borderRadius: 25,
-                                        paddingHorizontal: 8,
-                                        paddingVertical: 2
+                                        paddingHorizontal: px2dp(10),
+                                        paddingVertical: px2dp(6)
                                     }}
                                 >
-                                    <Text style={{ color: '#fff', fontSize: 12 }}>选规格</Text>
+                                    <Text style={{ color: '#fff', fontSize: fontSize(10) }}>选规格</Text>
                                 </TouchableOpacity>
                             </View>
                         ) : (
                             <View>
-                                <Text style={{ fontSize: 12, color: 'gray' }}>{unit.name}</Text>
+                                <Text style={{ fontSize: fontSize(10), color: 'gray' }}>{unit.name}</Text>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                                    <Text style={{ fontSize: 12, color: 'crimson' }}>￥{ForceMoney(unit.price)}</Text>
+                                    <Text style={{ fontSize: fontSize(10), color: 'crimson' }}>￥{ForceMoney(unit.price)}</Text>
                                     {
                                         quantity <= 0 ? (
-                                            <TouchableOpacity style={{ marginRight: 10 }} onPress={this.add}>
-                                                <Icon name="plus" color="#ff4081" size={16} />
+                                            <TouchableOpacity style={{ marginRight: px2dp(10) }} onPress={this.add}>
+                                                <Icon name="plus" color="#ff4081" size={fontSize(14)} />
                                             </TouchableOpacity>
                                         ) : <NumberInput min={0} max={max} value={quantity} onChange={this.changeHandler} />
                                     }

@@ -9,8 +9,10 @@ class ShoppingCartStore {
 
     constructor () {
         autorun(() => {
-            AsyncStorage.setItem(`SHOPPING_CART_${this.code}`, JSON.stringify(this.data));
-            console.log('update shopping cart', this.data);
+            if (this.code && this.data) {
+                AsyncStorage.setItem(`SHOPPING_CART_${this.code}`, JSON.stringify(this.data));
+                console.log(`update shopping cart ${this.code}`, this.data);
+            }
         });
     }
 
@@ -22,7 +24,7 @@ class ShoppingCartStore {
     static async load (code) {
         const data = await AsyncStorage.getItem(`SHOPPING_CART_${code}`);
         try {
-            return JSON.parse(data) || [];
+            return !data ? [] : JSON.parse(data) || [];
         } catch (err) {
             return [];
         }

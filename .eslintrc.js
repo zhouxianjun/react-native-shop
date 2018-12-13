@@ -16,7 +16,9 @@ module.exports = {
     ],
     "globals": {
         "__DEV__": true,
-        "fetch": true
+        "fetch": true,
+        "px2dp": true,
+        "fontSize": true
     },
     "parser": "babel-eslint",
     "rules": {
