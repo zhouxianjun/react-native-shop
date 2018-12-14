@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
     View, Text, TouchableOpacity, Image
 } from 'react-native';
-import { CachedImage } from 'react-native-img-cache';
+// import { CachedImage } from 'react-native-img-cache';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -57,6 +57,7 @@ class GoodsItem extends Component {
     render () {
         const { unit } = this.props;
         const { quantity, max } = this.state;
+        console.log(transformImgUrl(unit.picture));
         return (
             <View style={{
                 flex: 1,
@@ -88,7 +89,7 @@ class GoodsItem extends Component {
                                     style={{
                                         backgroundColor: '#ff4081',
                                         borderRadius: 25,
-                                        paddingHorizontal: px2dp(10),
+                                        paddingHorizontal: px2dp(12),
                                         paddingVertical: px2dp(6)
                                     }}
                                 >
@@ -96,18 +97,25 @@ class GoodsItem extends Component {
                                 </TouchableOpacity>
                             </View>
                         ) : (
-                            <View>
-                                <Text style={{ fontSize: fontSize(10), color: 'gray' }}>{unit.name}</Text>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                                    <Text style={{ fontSize: fontSize(10), color: 'crimson' }}>￥{ForceMoney(unit.price)}</Text>
-                                    {
-                                        quantity <= 0 ? (
-                                            <TouchableOpacity style={{ marginRight: px2dp(10) }} onPress={this.add}>
-                                                <Icon name="plus" color="#ff4081" size={fontSize(14)} />
-                                            </TouchableOpacity>
-                                        ) : <NumberInput min={0} max={max} value={quantity} onChange={this.changeHandler} />
-                                    }
+                            <View style={{
+                                flexDirection: 'row', justifyContent: 'space-between', flex: 1, alignItems: 'flex-end'
+                            }}
+                            >
+                                <View style={{ justifyContent: 'space-between', height: '100%', paddingTop: px2dp(6) }}>
+                                    <View>
+                                        <Text style={{ fontSize: fontSize(10), color: 'gray' }}>{unit.name}</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={{ fontSize: fontSize(12), color: 'crimson' }}>￥{ForceMoney(unit.price)}</Text>
+                                    </View>
                                 </View>
+                                {
+                                    quantity <= 0 ? (
+                                        <TouchableOpacity style={{ marginRight: px2dp(10) }} onPress={this.add}>
+                                            <Icon name="plus" color="#ff4081" size={fontSize(14)} />
+                                        </TouchableOpacity>
+                                    ) : <NumberInput min={0} max={max} value={quantity} onChange={this.changeHandler} />
+                                }
                             </View>
                         )
                     }

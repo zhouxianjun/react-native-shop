@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/dist/Ionicons';
 import PropTypes from 'prop-types';
 
 export default class NumberInput extends PureComponent {
@@ -52,29 +52,34 @@ export default class NumberInput extends PureComponent {
                 borderRadius: 5,
                 borderColor: '#ddd',
                 borderWidth: 1,
+                height: px2dp(40),
                 alignItems: 'center'
             }}
             >
                 <TouchableOpacity
-                    style={{ padding: 8, borderColor: '#ddd', borderRightWidth: 1 }}
+                    style={{
+                        paddingHorizontal: px2dp(8), borderColor: '#ddd', borderRightWidth: 1
+                    }}
                     disabled={value <= min}
                     onPress={() => this.stepBy(-step)}
                 >
-                    <Icon name="minus" color={value <= min ? '#ddd' : '#000'} />
+                    <Icon name="md-remove" color={value <= min ? '#ddd' : '#000'} />
                 </TouchableOpacity>
                 <TextInput
-                    style={{ padding: 0, width: 50, textAlign: 'center' }}
+                    style={{ padding: 0, width: px2dp(50), textAlign: 'center' }}
                     underlineColorAndroid="transparent"
                     keyboardType="numeric"
                     onChangeText={val => this.change(val)}
                 >{value}
                 </TextInput>
                 <TouchableOpacity
-                    style={{ padding: 8, borderColor: '#ddd', borderLeftWidth: 1 }}
+                    style={{
+                        paddingHorizontal: px2dp(8), borderColor: '#ddd', borderLeftWidth: 1
+                    }}
                     disabled={value >= max}
                     onPress={() => this.stepBy(step)}
                 >
-                    <Icon name="plus" color={value >= max ? '#ddd' : '#000'} />
+                    <Icon name="md-add" color={value >= max ? '#ddd' : '#000'} />
                 </TouchableOpacity>
             </View>
         );

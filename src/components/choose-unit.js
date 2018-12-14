@@ -1,0 +1,179 @@
+import React, { Component } from 'react';
+import {
+    View, Image, Text, TouchableOpacity
+} from 'react-native';
+import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react';
+import { computed, reaction } from 'mobx';
+import { Modal } from 'antd-mobile-rn';
+import Icon from 'react-native-vector-icons/dist/Ionicons';
+import NumberInput from './number-input';
+import { ForceMoney, transformImgUrl } from '../lib/common';
+
+@inject(['ShoppingCartStore'])
+@observer
+class ChooseUnit extends Component {
+    static propTypes = {
+        visible: PropTypes.bool,
+        onClose: PropTypes.func,
+        goods: PropTypes.object.isRequired,
+        ShoppingCartStore: PropTypes.object.isRequired
+    }
+
+    static defaultProps = {
+        visible: false,
+        onClose: () => {}
+    }
+
+    state = {
+        unit: {}
+    }
+
+    constructor (props) {
+        super(props);
+        reaction(() => {
+            const { goods } = this.props;
+            if (goods.units) {
+                return this.shoppingCart.find(item => item.goodsId === goods.id && item.quantity > 0) || goods.units[0];
+            }
+            return {};
+        }, unit => this.setState({ unit }));
+    }
+
+    @computed get units () {
+        const { goods } = this.props;
+        return goods.units;
+    }
+
+    @computed get quantity () {
+        const { unit } = this.state;
+        const cart = this.shoppingCart.find(item => item.id === unit.id);
+        return (cart ? cart.quantity : unit.quantity) || 0;
+    }
+
+    @computed get max () {
+        const { unit } = this.state;
+        return this.quantity + unit.canSaleQty - this.shoppingCart
+            .filter(item => item.goodsId === unit.goodsId)
+            .reduce((total, current) => total + current.quantity, 0);
+    }
+
+    @computed get shoppingCart () {
+        const { ShoppingCartStore } = this.props;
+        return ShoppingCartStore.data;
+    }
+
+    @computed get picture () {
+        const { unit } = this.state;
+        return transformImgUrl(unit.picture);
+    }
+
+    @computed get price () {
+        const { unit } = this.state;
+        return ForceMoney(unit.price);
+    }
+
+    add = () => {
+        this.changeQuantityHandler(1);
+    }
+
+    changeQuantityHandler = (quantity) => {
+        const { unit } = this.state;
+        const newer = { ...unit, quantity };
+        this.setState({ unit: newer });
+        const { ShoppingCartStore } = this.props;
+        ShoppingCartStore.changeItem(newer);
+    }
+
+    changeUnit (unit) {
+        this.setState({ unit });
+    }
+
+    render () {
+        const { visible, goods, onClose } = this.props;
+        if (!visible || !goods || !this.units) {
+            return <View />;
+        }
+        const { unit } = this.state;
+        return (
+            <Modal
+                visible={visible}
+                maskClosable
+                transparent
+                title={goods.name}
+                onClose={onClose}
+                style={{ paddingTop: px2dp(6) }}
+                bodyStyle={{ paddingBottom: 0, paddingHorizontal: 0 }}
+            >
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingHorizontal: px2dp(10)
+                }}
+                >
+                    <View style={{ flexDirection: 'row' }}>
+                        <Image
+                            source={{ uri: this.picture }}
+                            resizeMode="contain"
+                            style={{ height: px2dp(80), width: px2dp(80) }}
+                        />
+                        <View style={{ justifyContent: 'center', marginLeft: px2dp(10) }}>
+                            <Text>{unit.name}</Text>
+                        </View>
+                    </View>
+                    <Text style={{ color: 'crimson', fontSize: fontSize(16) }}>￥{this.price}</Text>
+                </View>
+                <View>
+                    <View style={{ flexDirection: 'row' }}>
+                        {this.units.map(u => (
+                            <TouchableOpacity
+                                key={`choose-unit-${u.id}`}
+                                onPress={() => this.changeUnit(u)}
+                                style={{
+                                    backgroundColor: unit.id === u.id ? '#ff4081' : 'gray',
+                                    paddingHorizontal: px2dp(14),
+                                    paddingVertical: px2dp(6),
+                                    borderRadius: 25,
+                                    marginHorizontal: px2dp(10),
+                                    marginVertical: px2dp(8)
+                                }}
+                            >
+                                <Text style={{ color: unit.id === u.id ? '#fff' : '#000', fontSize: fontSize(12) }}>{u.name}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: px2dp(10),
+                        paddingVertical: px2dp(20),
+                        paddingHorizontal: px2dp(10),
+                        backgroundColor: '#eee'
+                    }}
+                    >
+                        <Text>数量</Text>
+                        {this.quantity > 0
+                            ? <NumberInput min={0} max={this.max} value={this.quantity} onChange={this.changeQuantityHandler} /> : (
+                                <TouchableOpacity
+                                    onPress={this.add}
+                                    style={{
+                                        flexDirection: 'row',
+                                        backgroundColor: '#ff4081',
+                                        borderRadius: 25,
+                                        paddingHorizontal: px2dp(14),
+                                        paddingVertical: px2dp(6)
+                                    }}
+                                >
+                                    <Icon name="md-add" color="#fff" />
+                                    <Text style={{ color: '#fff', fontSize: fontSize(10), marginLeft: px2dp(4) }}>加入购物车</Text>
+                                </TouchableOpacity>
+                            )}
+                    </View>
+                </View>
+            </Modal>
+        );
+    }
+}
+
+export default ChooseUnit;

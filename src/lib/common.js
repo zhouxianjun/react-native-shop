@@ -1,21 +1,3 @@
-import {
-    Platform
-} from 'react-native';
-
-// iPhoneX
-const X_WIDTH = 375;
-const X_HEIGHT = 812;
-
-/**
- * 判断是否为iphoneX
- * @returns {boolean}
- */
-export const isIphoneX = () => (
-    Platform.OS === 'ios'
-        && ((global.SCREEN_HEIGHT === X_HEIGHT && global.SCREEN_WIDTH === X_WIDTH)
-            || (global.SCREEN_HEIGHT === X_WIDTH && global.SCREEN_WIDTH === X_HEIGHT))
-);
-
 /**
  * 把数据的每个key按照前缀分组作为新的key(前缀)的值:
  * {name: 'Alone', roleNames: 'a,b'} = {name: 'Alone', role: [{ name: 'a' }, { name: 'b' }]}

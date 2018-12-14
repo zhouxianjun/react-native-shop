@@ -2,7 +2,7 @@
 
 import { AppRegistry, YellowBox } from 'react-native';
 import './src/lib/global';
-import Step from './src/step';
+import App from './src/App';
 import { name as appName } from './app.json';
 
 YellowBox.ignoreWarnings([
@@ -11,4 +11,4 @@ YellowBox.ignoreWarnings([
     'Require cycle: node_modules\\rn-fetch-blob\\index.js'
 ]);
 
-AppRegistry.registerComponent(appName, () => Step);
+AppRegistry.registerComponent(appName, () => App);
