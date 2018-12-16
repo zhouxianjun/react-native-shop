@@ -1,9 +1,11 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 
-export default class NumberInput extends PureComponent {
+@observer
+class NumberInput extends Component {
     static propTypes = {
         min: PropTypes.number,
         max: PropTypes.number,
@@ -20,13 +22,8 @@ export default class NumberInput extends PureComponent {
         onChange: () => {}
     }
 
-    constructor ({ value }) {
-        super();
-        this.state = { value };
-    }
-
     stepBy (step) {
-        const { value } = this.state;
+        const { value } = this.props;
         this.change(value + step);
     }
 
@@ -35,30 +32,31 @@ export default class NumberInput extends PureComponent {
             return;
         }
         const value = Number.parseInt(`${newer || 0}`, 10);
-        const { min, max, onChange } = this.props;
+        const {
+            min, max, onChange, value: old
+        } = this.props;
         if (value >= min && value <= max) {
-            this.setState({ value });
-            const { value: old } = this.state;
             onChange(value, old);
         }
     }
 
     render () {
-        const { value } = this.state;
-        const { step, min, max } = this.props;
+        const {
+            step, min, max, value
+        } = this.props;
         return (
             <View style={{
                 flexDirection: 'row',
                 borderRadius: 5,
                 borderColor: '#ddd',
                 borderWidth: 1,
-                height: px2dp(40),
+                height: 30,
                 alignItems: 'center'
             }}
             >
                 <TouchableOpacity
                     style={{
-                        paddingHorizontal: px2dp(8), borderColor: '#ddd', borderRightWidth: 1
+                        paddingHorizontal: 8, borderColor: '#ddd', borderRightWidth: 1
                     }}
                     disabled={value <= min}
                     onPress={() => this.stepBy(-step)}
@@ -66,7 +64,7 @@ export default class NumberInput extends PureComponent {
                     <Icon name="md-remove" color={value <= min ? '#ddd' : '#000'} />
                 </TouchableOpacity>
                 <TextInput
-                    style={{ padding: 0, width: px2dp(50), textAlign: 'center' }}
+                    style={{ padding: 0, width: 40, textAlign: 'center' }}
                     underlineColorAndroid="transparent"
                     keyboardType="numeric"
                     onChangeText={val => this.change(val)}
@@ -74,7 +72,7 @@ export default class NumberInput extends PureComponent {
                 </TextInput>
                 <TouchableOpacity
                     style={{
-                        paddingHorizontal: px2dp(8), borderColor: '#ddd', borderLeftWidth: 1
+                        paddingHorizontal: 8, borderColor: '#ddd', borderLeftWidth: 1
                     }}
                     disabled={value >= max}
                     onPress={() => this.stepBy(step)}
@@ -85,3 +83,5 @@ export default class NumberInput extends PureComponent {
         );
     }
 }
+
+export default NumberInput;

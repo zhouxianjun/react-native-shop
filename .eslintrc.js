@@ -16,9 +16,6 @@ module.exports = {
     ],
     "globals": {
         "__DEV__": true,
-        "fetch": true,
-        "px2dp": true,
-        "fontSize": true,
         "isIos": true,
         "isAndroid": true,
         "isIphoneX": true

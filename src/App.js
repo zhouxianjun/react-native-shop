@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Router, Stack, Scene, Actions, ActionConst, Tabs
+    Router, Stack, Scene, Actions, ActionConst, Tabs, Overlay
 } from 'react-native-router-flux';
 import { TouchableOpacity } from 'react-native';
 import { Provider } from 'mobx-react';
@@ -11,6 +11,7 @@ import Launch from './views/launch';
 import Login from './views/login';
 import Home from './views/home';
 import User from './views/user';
+import ShoppingCartView from './views/shopping-cart';
 import ShoppingCart from './components/shopping-cart';
 
 let lastBackPressed = 0;
@@ -45,10 +46,16 @@ export default function () {
                                 title="首页"
                                 titleStyle={{ alignSelf: 'center', justifyContent: 'center' }}
                                 renderRightButton={() => (
-                                    <TouchableOpacity onPress={() => Actions.user()}>
+                                    <TouchableOpacity onPress={Actions.user}>
                                         <Icon style={{ marginRight: 10 }} name="user" size={18} />
                                     </TouchableOpacity>
                                 )}
+                            />
+                            <Overlay
+                                key="shoppingCart"
+                                back
+                                title="购物车"
+                                component={ShoppingCartView}
                             />
                         </Tabs>
 

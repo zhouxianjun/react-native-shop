@@ -34,7 +34,9 @@ class ChooseUnit extends Component {
         reaction(() => {
             const { goods } = this.props;
             if (goods.units) {
-                return this.shoppingCart.find(item => item.goodsId === goods.id && item.quantity > 0) || goods.units[0];
+                const find = this.shoppingCart.find(item => item.goodsId === goods.id && item.quantity > 0);
+                const { unit } = this.state;
+                return find || (unit?.id ? unit : goods.units[0]);
             }
             return {};
         }, unit => this.setState({ unit }));
@@ -102,27 +104,27 @@ class ChooseUnit extends Component {
                 transparent
                 title={goods.name}
                 onClose={onClose}
-                style={{ paddingTop: px2dp(6) }}
+                style={{ paddingTop: 6 }}
                 bodyStyle={{ paddingBottom: 0, paddingHorizontal: 0 }}
             >
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    paddingHorizontal: px2dp(10)
+                    paddingHorizontal: 10
                 }}
                 >
                     <View style={{ flexDirection: 'row' }}>
                         <Image
                             source={{ uri: this.picture }}
                             resizeMode="contain"
-                            style={{ height: px2dp(80), width: px2dp(80) }}
+                            style={{ height: 80, width: 80 }}
                         />
-                        <View style={{ justifyContent: 'center', marginLeft: px2dp(10) }}>
+                        <View style={{ justifyContent: 'center', marginLeft: 10 }}>
                             <Text>{unit.name}</Text>
                         </View>
                     </View>
-                    <Text style={{ color: 'crimson', fontSize: fontSize(16) }}>￥{this.price}</Text>
+                    <Text style={{ color: 'crimson', fontSize: 16 }}>￥{this.price}</Text>
                 </View>
                 <View>
                     <View style={{ flexDirection: 'row' }}>
@@ -132,23 +134,23 @@ class ChooseUnit extends Component {
                                 onPress={() => this.changeUnit(u)}
                                 style={{
                                     backgroundColor: unit.id === u.id ? '#ff4081' : 'gray',
-                                    paddingHorizontal: px2dp(14),
-                                    paddingVertical: px2dp(6),
+                                    paddingHorizontal: 14,
+                                    paddingVertical: 6,
                                     borderRadius: 25,
-                                    marginHorizontal: px2dp(10),
-                                    marginVertical: px2dp(8)
+                                    marginHorizontal: 8,
+                                    marginVertical: 8
                                 }}
                             >
-                                <Text style={{ color: unit.id === u.id ? '#fff' : '#000', fontSize: fontSize(12) }}>{u.name}</Text>
+                                <Text style={{ color: unit.id === u.id ? '#fff' : '#000', fontSize: 12 }}>{u.name}</Text>
                             </TouchableOpacity>
                         ))}
                     </View>
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        marginTop: px2dp(10),
-                        paddingVertical: px2dp(20),
-                        paddingHorizontal: px2dp(10),
+                        marginTop: 10,
+                        paddingVertical: 16,
+                        paddingHorizontal: 10,
                         backgroundColor: '#eee'
                     }}
                     >
@@ -161,12 +163,12 @@ class ChooseUnit extends Component {
                                         flexDirection: 'row',
                                         backgroundColor: '#ff4081',
                                         borderRadius: 25,
-                                        paddingHorizontal: px2dp(14),
-                                        paddingVertical: px2dp(6)
+                                        paddingHorizontal: 14,
+                                        paddingVertical: 6
                                     }}
                                 >
                                     <Icon name="md-add" color="#fff" />
-                                    <Text style={{ color: '#fff', fontSize: fontSize(10), marginLeft: px2dp(4) }}>加入购物车</Text>
+                                    <Text style={{ color: '#fff', fontSize: 12, marginLeft: 4 }}>加入购物车</Text>
                                 </TouchableOpacity>
                             )}
                     </View>

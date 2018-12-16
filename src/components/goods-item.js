@@ -23,20 +23,32 @@ class GoodsItem extends Component {
         onChoose: () => {}
     }
 
-    constructor ({ unit }) {
-        super();
-        this.state = {
-            quantity: unit.quantity || 0,
-            max: unit.canSaleQty || 0
-        };
+    @computed get quantity () {
+        const { unit } = this.props;
+        const cart = this.shoppingCart.find(item => item.id === unit.id);
+        return (cart ? cart.quantity : unit.quantity) || 0;
     }
 
     @computed get max () {
-        const { ShoppingCartStore, unit } = this.props;
-        const { quantity } = this.state;
-        return quantity + unit.canSaleQty - ShoppingCartStore.data
+        const { unit } = this.props;
+        return this.quantity + unit.canSaleQty - this.shoppingCart
             .filter(item => item.goodsId === unit.goodsId)
             .reduce((total, current) => total + current.quantity, 0);
+    }
+
+    @computed get shoppingCart () {
+        const { ShoppingCartStore } = this.props;
+        return ShoppingCartStore.data;
+    }
+
+    @computed get picture () {
+        const { unit } = this.props;
+        return transformImgUrl(unit.picture);
+    }
+
+    @computed get price () {
+        const { unit } = this.props;
+        return ForceMoney(unit.price);
     }
 
     add = () => {
@@ -44,7 +56,6 @@ class GoodsItem extends Component {
     }
 
     changeHandler = (quantity) => {
-        this.setState({ quantity });
         const { ShoppingCartStore, unit } = this.props;
         ShoppingCartStore.changeItem({ ...unit, quantity });
     }
@@ -56,25 +67,23 @@ class GoodsItem extends Component {
 
     render () {
         const { unit } = this.props;
-        const { quantity, max } = this.state;
-        console.log(transformImgUrl(unit.picture));
         return (
             <View style={{
                 flex: 1,
                 flexDirection: 'row',
-                paddingHorizontal: px2dp(6),
-                paddingVertical: px2dp(10)
+                paddingHorizontal: 6,
+                paddingVertical: 10
             }}
             >
-                <View style={{ marginRight: px2dp(10), borderRadius: 5 }}>
+                <View style={{ marginRight: 10 }}>
                     <Image
-                        source={{ uri: transformImgUrl(unit.picture) }}
+                        source={{ uri: this.picture }}
                         resizeMode="contain"
-                        style={{ height: px2dp(120), width: px2dp(120) }}
+                        style={{ height: 60, width: 60 }}
                     />
                 </View>
                 <View style={{ flex: 1, justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: fontSize(14) }}>{unit.title}</Text>
+                    <Text style={{ fontSize: 14 }}>{unit.title}</Text>
                     {
                         unit.choose ? (
                             <View style={{
@@ -83,17 +92,17 @@ class GoodsItem extends Component {
                                 alignItems: 'flex-end'
                             }}
                             >
-                                <Text style={{ fontSize: fontSize(12), color: 'crimson' }}>￥{ForceMoney(unit.price)}</Text>
+                                <Text style={{ fontSize: 12, color: 'crimson' }}>￥{this.price}</Text>
                                 <TouchableOpacity
                                     onPress={this.chooseHandler}
                                     style={{
                                         backgroundColor: '#ff4081',
                                         borderRadius: 25,
-                                        paddingHorizontal: px2dp(12),
-                                        paddingVertical: px2dp(6)
+                                        paddingHorizontal: 12,
+                                        paddingVertical: 6
                                     }}
                                 >
-                                    <Text style={{ color: '#fff', fontSize: fontSize(10) }}>选规格</Text>
+                                    <Text style={{ color: '#fff', fontSize: 11 }}>选规格</Text>
                                 </TouchableOpacity>
                             </View>
                         ) : (
@@ -101,20 +110,20 @@ class GoodsItem extends Component {
                                 flexDirection: 'row', justifyContent: 'space-between', flex: 1, alignItems: 'flex-end'
                             }}
                             >
-                                <View style={{ justifyContent: 'space-between', height: '100%', paddingTop: px2dp(6) }}>
+                                <View style={{ justifyContent: 'space-between', height: '100%', paddingTop: 6 }}>
                                     <View>
-                                        <Text style={{ fontSize: fontSize(10), color: 'gray' }}>{unit.name}</Text>
+                                        <Text style={{ fontSize: 11, color: 'gray' }}>{unit.name}</Text>
                                     </View>
                                     <View>
-                                        <Text style={{ fontSize: fontSize(12), color: 'crimson' }}>￥{ForceMoney(unit.price)}</Text>
+                                        <Text style={{ fontSize: 12, color: 'crimson' }}>￥{this.price}</Text>
                                     </View>
                                 </View>
                                 {
-                                    quantity <= 0 ? (
-                                        <TouchableOpacity style={{ marginRight: px2dp(10) }} onPress={this.add}>
-                                            <Icon name="plus" color="#ff4081" size={fontSize(14)} />
+                                    this.quantity <= 0 ? (
+                                        <TouchableOpacity style={{ marginRight: 10 }} onPress={this.add}>
+                                            <Icon name="plus" color="#ff4081" size={14} />
                                         </TouchableOpacity>
-                                    ) : <NumberInput min={0} max={max} value={quantity} onChange={this.changeHandler} />
+                                    ) : <NumberInput min={0} max={this.max} value={this.quantity} onChange={this.changeHandler} />
                                 }
                             </View>
                         )

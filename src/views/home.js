@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
     cateItem: {
         alignItems: 'center',
         justifyContent: 'center',
-        width: px2dp(150),
-        height: px2dp(60)
+        width: 100,
+        height: 40
     },
     cateItemSelect: {
         backgroundColor: '#F5F5F5',
@@ -59,7 +59,7 @@ class Home extends Component {
             <View style={{ flex: 1 }}>
                 <SearchBar placeholder="搜索" />
                 <View style={{ flexDirection: 'row', flex: 1 }}>
-                    <View style={{ backgroundColor: '#F5F5F5', marginRight: px2dp(8) }}>
+                    <View style={{ backgroundColor: '#F5F5F5', marginRight: 8 }}>
                         <FlatList
                             data={categorys}
                             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#eee' }} />}
@@ -69,7 +69,7 @@ class Home extends Component {
                                     style={[styles.cateItem, currentCate === item.id ? styles.cateItemSelect : { backgroundColor: 'white' }]}
                                     onPress={() => this.selectCateHandler(item)}
                                 >
-                                    <Text style={{ fontSize: fontSize(14), color: currentCate === item.id ? 'red' : '#333' }}>{item.name}</Text>
+                                    <Text style={{ fontSize: 14, color: currentCate === item.id ? 'red' : '#333' }}>{item.name}</Text>
                                 </TouchableOpacity>
                             )}
                         />
