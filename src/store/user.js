@@ -35,8 +35,8 @@ class UserStore {
         return true;
     }
 
-    async loadAuthInfo () {
-        const result = await axios('/info', {});
+    async loadAuthInfo ({ force }) {
+        const result = await axios('/info', { force });
         if (result.success) {
             this.member = result.value;
             this.specialGoodsCategory = result.data.specialGoodsCategory;

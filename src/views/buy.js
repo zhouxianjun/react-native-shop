@@ -18,6 +18,11 @@ class Buy extends Component {
         ShoppingCartStore: PropTypes.any.isRequired
     }
 
+    componentDidMount () {
+        const { UserStore } = this.props;
+        UserStore.loadAuthInfo({ force: true });
+    }
+
     @computed get list () {
         const { ShoppingCartStore } = this.props;
         return ShoppingCartStore.data.map(item => ({ ...item }));
