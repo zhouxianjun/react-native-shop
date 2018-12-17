@@ -35,7 +35,7 @@ class UserStore {
         return true;
     }
 
-    async loadAuthInfo ({ force }) {
+    async loadAuthInfo ({ force } = { force: false }) {
         const result = await axios('/info', { force });
         if (result.success) {
             this.member = result.value;

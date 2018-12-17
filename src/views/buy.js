@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    View, Text, FlatList, TouchableOpacity
+    View, Text, FlatList
 } from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
@@ -50,7 +50,7 @@ class Buy extends Component {
                     <View style={{ marginLeft: 10 }}>
                         <View style={{ flexDirection: 'row' }}>
                             <Icon name="ios-pin" size={18} style={{ position: 'absolute', left: -14, bottom: -1 }} />
-                            <Text>配送地址</Text>
+                            <Text style={{ fontSize: 16 }}>配送地址</Text>
                         </View>
                         <View style={{ height: 1, backgroundColor: '#eee', marginVertical: 4 }} />
                         <View>
@@ -64,7 +64,7 @@ class Buy extends Component {
                     <View style={{ marginLeft: 10 }}>
                         <View style={{ flexDirection: 'row', paddingLeft: 4 }}>
                             <Icon name="ios-briefcase" size={18} style={{ position: 'absolute', left: -14, bottom: -1 }} />
-                            <Text>梅溪湖店</Text>
+                            <Text style={{ fontSize: 16 }}>梅溪湖店</Text>
                         </View>
                         <View style={{ height: 1, backgroundColor: '#eee', marginVertical: 4 }} />
                         <FlatList

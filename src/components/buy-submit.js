@@ -32,7 +32,7 @@ class Submit extends Component {
                 justifyContent: 'space-between',
                 height: 50,
                 backgroundColor: '#2B2B2B',
-                marginBottom: isIphoneX ? 12 : 0
+                marginBottom: isIphoneX ? 22 : 0
             }}
             >
                 <View style={{
