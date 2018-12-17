@@ -50,7 +50,7 @@ class ChooseUnit extends Component {
     @computed get quantity () {
         const { unit } = this.state;
         const cart = this.shoppingCart.find(item => item.id === unit.id);
-        return (cart ? cart.quantity : unit.quantity) || 0;
+        return cart?.quantity || 0;
     }
 
     @computed get max () {
@@ -81,7 +81,8 @@ class ChooseUnit extends Component {
 
     changeQuantityHandler = (quantity) => {
         const { unit } = this.state;
-        const newer = { ...unit, quantity };
+        const { goods } = this.props;
+        const newer = { ...unit, quantity, title: goods.name };
         this.setState({ unit: newer });
         const { ShoppingCartStore } = this.props;
         ShoppingCartStore.changeItem(newer);
@@ -167,7 +168,7 @@ class ChooseUnit extends Component {
                                         paddingVertical: 6
                                     }}
                                 >
-                                    <Icon name="md-add" color="#fff" />
+                                    <Icon name="md-add" color="#fff" size={16} />
                                     <Text style={{ color: '#fff', fontSize: 12, marginLeft: 4 }}>加入购物车</Text>
                                 </TouchableOpacity>
                             )}

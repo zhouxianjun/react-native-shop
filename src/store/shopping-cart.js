@@ -42,6 +42,11 @@ class ShoppingCartStore {
         return ((this.price + this.deliveryFee) / 100).toFixed(2);
     }
 
+    @computed get discount () {
+        const { deliveryFee } = UserStore;
+        return !this.isNeedDeliveryFee ? deliveryFee : 0;
+    }
+
     async init (code) {
         this.code = code;
         this.data = await ShoppingCartStore.load(code);

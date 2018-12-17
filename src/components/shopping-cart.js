@@ -87,6 +87,7 @@ class ShoppingCart extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     disabled={this.total <= 0}
+                    onPress={Actions.buy}
                     style={{
                         paddingRight: 10,
                         width: 80,

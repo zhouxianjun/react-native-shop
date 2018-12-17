@@ -12,6 +12,8 @@ import Login from './views/login';
 import Home from './views/home';
 import User from './views/user';
 import ShoppingCartView from './views/shopping-cart';
+import Buy from './views/buy';
+import BuySubmit from './components/buy-submit';
 import ShoppingCart from './components/shopping-cart';
 
 let lastBackPressed = 0;
@@ -64,6 +66,18 @@ export default function () {
                             component={User}
                             title="我的"
                         />
+                        <Tabs
+                            key="buy"
+                            hideNavBar
+                            back
+                            tabBarComponent={BuySubmit}
+                        >
+                            <Scene
+                                key="_buy"
+                                component={Buy}
+                                title="提交订单"
+                            />
+                        </Tabs>
                     </Stack>
                     <Stack key="login" title="登录" type={ActionConst.RESET}>
                         <Scene key="loginMan" component={Login} />

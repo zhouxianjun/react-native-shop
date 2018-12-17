@@ -16,10 +16,12 @@ class GoodsItem extends Component {
     static propTypes = {
         unit: PropTypes.object.isRequired,
         onChoose: PropTypes.func,
+        edit: PropTypes.bool,
         ShoppingCartStore: PropTypes.object.isRequired
     }
 
     static defaultProps = {
+        edit: true,
         onChoose: () => {}
     }
 
@@ -63,6 +65,18 @@ class GoodsItem extends Component {
     chooseHandler = () => {
         const { unit, onChoose } = this.props;
         onChoose(unit);
+    }
+
+    renderEdit () {
+        const { edit } = this.props;
+        if (edit) {
+            return this.quantity <= 0 ? (
+                <TouchableOpacity style={{ marginRight: 10 }} onPress={this.add}>
+                    <Icon name="plus" color="#ff4081" size={14} />
+                </TouchableOpacity>
+            ) : <NumberInput min={0} max={this.max} value={this.quantity} onChange={this.changeHandler} />;
+        }
+        return <View><Text>x{this.quantity}</Text></View>;
     }
 
     render () {
@@ -119,11 +133,7 @@ class GoodsItem extends Component {
                                     </View>
                                 </View>
                                 {
-                                    this.quantity <= 0 ? (
-                                        <TouchableOpacity style={{ marginRight: 10 }} onPress={this.add}>
-                                            <Icon name="plus" color="#ff4081" size={14} />
-                                        </TouchableOpacity>
-                                    ) : <NumberInput min={0} max={this.max} value={this.quantity} onChange={this.changeHandler} />
+                                    this.renderEdit()
                                 }
                             </View>
                         )
