@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import { Actions } from 'react-native-router-flux';
 import NumberInput from './number-input';
 import { ForceMoney, transformImgUrl } from '../lib/common';
 
@@ -53,6 +54,11 @@ class GoodsItem extends Component {
         return ForceMoney(unit.price);
     }
 
+    @computed get goodsId () {
+        const { unit } = this.props;
+        return unit.goodsId;
+    }
+
     add = () => {
         this.changeHandler(1);
     }
@@ -66,6 +72,8 @@ class GoodsItem extends Component {
         const { unit, onChoose } = this.props;
         onChoose(unit);
     }
+
+    goDetail = () => Actions.productDetail({ goodsId: this.goodsId })
 
     renderEdit () {
         const { edit } = this.props;
@@ -89,13 +97,13 @@ class GoodsItem extends Component {
                 paddingVertical: 10
             }}
             >
-                <View style={{ marginRight: 10 }}>
+                <TouchableOpacity style={{ marginRight: 10 }} onPress={this.goDetail}>
                     <Image
                         source={{ uri: this.picture }}
                         resizeMode="contain"
                         style={{ height: 60, width: 60 }}
                     />
-                </View>
+                </TouchableOpacity>
                 <View style={{ flex: 1, justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: 14 }}>{unit.title}</Text>
                     {

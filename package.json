@@ -19,6 +19,9 @@
     "react-native-img-cache": "^1.6.0",
     "react-native-refresh-list-view": "^1.0.10",
     "react-native-router-flux": "^4.0.6",
+    "react-native-scrollable-tab-view": "^0.10.0",
+    "react-native-splash-screen": "^3.1.1",
+    "react-native-swiper": "^1.5.14",
     "react-native-user-avatar": "^1.0.3",
     "react-native-vector-icons": "^6.1.0",
     "rn-fetch-blob": "^0.10.14"
