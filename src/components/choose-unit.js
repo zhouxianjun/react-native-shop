@@ -166,6 +166,8 @@ class ChooseUnit extends Component {
                                     onPress={this.add}
                                     style={{
                                         flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
                                         backgroundColor: '#ff4081',
                                         borderRadius: 25,
                                         paddingHorizontal: 14,

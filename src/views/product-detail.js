@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    View, Text, ScrollView, StatusBar, TouchableOpacity, Image
+    View, ScrollView, StatusBar, TouchableOpacity, Image, SafeAreaView, WebView
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
@@ -14,6 +14,7 @@ import { transformImgUrl, collectionForVo } from '../lib/common';
 import GoodsItem from '../components/goods-item';
 import ChooseUnit from '../components/choose-unit';
 
+/* eslint-disable no-bitwise */
 const randomColor = () => Array.from({ length: 6 }).reduce(val => val + (Math.random() * 16 | 0).toString(16), '#');
 
 @inject('ShoppingCartStore')
@@ -48,6 +49,11 @@ class ProductDetail extends Component {
         const { goods } = this.state;
         const array = Array.from(new Set([...(goods.imgs?.split(',') || []), ...(goods.unitPictures?.split(',') || [])]));
         return array.filter(v => !!v).map(v => transformImgUrl(v));
+    }
+
+    @computed get detail () {
+        const { goods } = this.state;
+        return goods.detail || '';
     }
 
     chooseHandler = () => {
@@ -96,7 +102,7 @@ class ProductDetail extends Component {
             <View style={{ flex: 1 }}>
                 <View style={{
                     position: 'absolute',
-                    top: StatusBar.currentHeight + 5,
+                    top: isIphoneX ? 45 : StatusBar.currentHeight + 5,
                     // backgroundColor: 'transparent',
                     width: '100%',
                     zIndex: 1
@@ -108,52 +114,54 @@ class ProductDetail extends Component {
                             style={{
                                 backgroundColor: 'rgba(0,0,0,0.5)',
                                 borderRadius: 50,
-                                height: 25,
-                                width: 25,
+                                height: 30,
+                                width: 30,
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}
                         >
-                            <Icon name="ios-arrow-back" size={20} color="#FFF" />
+                            <Icon name="ios-arrow-back" size={22} color="#FFF" />
                         </TouchableOpacity>
                         <View style={{ flexDirection: 'row' }}>
                             <TouchableOpacity style={{
                                 backgroundColor: 'rgba(0,0,0,0.5)',
                                 borderRadius: 50,
-                                height: 25,
-                                width: 25,
+                                height: 30,
+                                width: 30,
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                marginRight: 10
+                                marginRight: 15
                             }}
                             >
-                                <Icon name="ios-cart" size={20} color="#FFF" />
+                                <Icon name="ios-cart" size={22} color="#FFF" />
                             </TouchableOpacity>
                             <TouchableOpacity style={{
                                 backgroundColor: 'rgba(0,0,0,0.5)',
                                 borderRadius: 50,
-                                height: 25,
-                                width: 25,
+                                height: 30,
+                                width: 30,
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}
                             >
-                                <Icon name="ios-more" size={20} color="#FFF" />
+                                <Icon name="ios-more" size={22} color="#FFF" />
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
                 <ScrollView>
-                    {
-                        this.imgs && this.imgs.length
-                            ? (
-                                <Swiper showsButtons autoplay style={{ height: 400, backgroundColor: '#FFF' }}>
-                                    {
-                                        this.imgs.map(img => <Image key={img} source={{ uri: img }} style={{ height: 400 }} resizeMode="contain" />)
-                                    }
-                                </Swiper>
-                            ) : <View style={{ height: 400 }} />
-                    }
+                    <SafeAreaView style={{ height: 400, backgroundColor: '#FFF' }}>
+                        {
+                            this.imgs && this.imgs.length
+                                ? (
+                                    <Swiper showsButtons autoplay>
+                                        {
+                                            this.imgs.map(img => <Image key={img} source={{ uri: img }} style={{ height: 400 }} resizeMode="contain" />)
+                                        }
+                                    </Swiper>
+                                ) : <View />
+                        }
+                    </SafeAreaView>
                     <View style={{ marginTop: 15, backgroundColor: '#FFF' }}>
                         <Placeholder.ImageContent
                             size={60}
@@ -165,9 +173,14 @@ class ProductDetail extends Component {
                             <GoodsItem unit={item} onChoose={this.chooseHandler} />
                         </Placeholder.ImageContent>
                     </View>
-                    {/* {
-                        Array.from({ length: 30 }).map(() => <View style={{ height: 50, backgroundColor: randomColor() }} />)
-                    } */}
+                    <View style={{ marginTop: 15 }}>
+                        {
+                            Array.from({ length: 6 }).map((item, i) => <View key={`${i}`} style={{ height: 50, backgroundColor: randomColor() }} />)
+                        }
+                    </View>
+                    <View style={{ backgroundColor: 'red', height: 500 }}>
+                        <WebView originWhitelist={['*']} source={{ html: this.detail }} />
+                    </View>
                 </ScrollView>
                 <ChooseUnit visible={chooseUnitShow} onClose={this.closeChoose} goods={goods} />
             </View>

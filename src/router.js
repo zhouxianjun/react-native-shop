@@ -49,8 +49,10 @@ class RootRouter extends Component {
     }
 
     resetStatusBar = () => {
-        StatusBar.setBackgroundColor('gray');
-        StatusBar.setTranslucent(false);
+        if (isAndroid) {
+            StatusBar.setBackgroundColor('gray');
+            StatusBar.setTranslucent(false);
+        }
     }
 
     enterHome = () => {
@@ -58,8 +60,10 @@ class RootRouter extends Component {
     }
 
     enterGoodsDetail = () => {
-        StatusBar.setBackgroundColor('transparent');
-        StatusBar.setTranslucent(true);
+        if (isAndroid) {
+            StatusBar.setBackgroundColor('transparent');
+            StatusBar.setTranslucent(true);
+        }
     }
 
     render () {
