@@ -69,28 +69,37 @@ class RootRouter extends Component {
                     <Scene component={Launch} on={this.isLogin} success="app" failure="login" />
                     <Stack key="app" type={ActionConst.RESET}>
                         <Tabs
-                            key="home"
+                            key="appTabs"
                             hideNavBar
                             tabBarComponent={ShoppingCart}
                         >
-                            <Scene
-                                key="_home"
-                                component={Home}
-                                tabs
-                                title="首页"
-                                on={this.enterHome}
-                                renderRightButton={() => (
-                                    <TouchableOpacity onPress={Actions.user}>
-                                        <Icon style={{ marginRight: 10 }} name="user" size={18} />
-                                    </TouchableOpacity>
-                                )}
-                            />
-                            <Overlay
-                                key="shoppingCart"
-                                back
-                                title="购物车"
-                                component={ShoppingCartView}
-                            />
+                            <Stack key="appTabsStack">
+                                <Scene
+                                    key="home"
+                                    component={Home}
+                                    tabs
+                                    title="首页"
+                                    on={this.enterHome}
+                                    renderRightButton={() => (
+                                        <TouchableOpacity onPress={Actions.user}>
+                                            <Icon style={{ marginRight: 10 }} name="user" size={18} />
+                                        </TouchableOpacity>
+                                    )}
+                                />
+                                <Overlay
+                                    key="shoppingCart"
+                                    back
+                                    title="购物车"
+                                    component={ShoppingCartView}
+                                />
+                                <Scene
+                                    hideNavBar
+                                    key="productDetail"
+                                    component={ProductDetail}
+                                    title="详情"
+                                    on={this.enterGoodsDetail}
+                                />
+                            </Stack>
                         </Tabs>
 
                         <Scene
@@ -110,13 +119,6 @@ class RootRouter extends Component {
                                 title="提交订单"
                             />
                         </Tabs>
-                        <Scene
-                            hideNavBar
-                            key="productDetail"
-                            component={ProductDetail}
-                            title="详情"
-                            on={this.enterGoodsDetail}
-                        />
                     </Stack>
                     <Stack key="login" title="登录" type={ActionConst.RESET}>
                         <Scene key="loginMan" component={Login} />

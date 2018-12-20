@@ -31,7 +31,7 @@ class ChooseUnit extends Component {
 
     constructor (props) {
         super(props);
-        reaction(() => {
+        this.dispose = reaction(() => {
             const { goods } = this.props;
             if (goods.units) {
                 const find = this.shoppingCart.find(item => item.goodsId === goods.id && item.quantity > 0);
@@ -40,6 +40,10 @@ class ChooseUnit extends Component {
             }
             return {};
         }, unit => this.setState({ unit }));
+    }
+
+    componentWillUnmount () {
+        this.dispose();
     }
 
     @computed get units () {

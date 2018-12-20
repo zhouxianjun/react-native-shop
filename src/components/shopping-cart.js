@@ -49,7 +49,7 @@ class ShoppingCart extends Component {
             }}
             >
                 <TouchableOpacity
-                    onPress={Actions.shoppingCart}
+                    onPress={() => Actions.shoppingCart({ aa: 'aa' })}
                     disabled={this.total <= 0}
                     style={{ marginLeft: 20, flexDirection: 'row', alignItems: 'center' }}
                 >
