@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    View, ScrollView, StatusBar, TouchableOpacity, Image, SafeAreaView, WebView
+    View, ScrollView, StatusBar, TouchableOpacity, Image, SafeAreaView, StyleSheet, Text
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
@@ -9,13 +9,52 @@ import { inject, observer } from 'mobx-react';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import Swiper from 'react-native-swiper';
 import Placeholder from 'rn-placeholder';
+import HTML from 'react-native-render-html';
 import { get } from '../lib/axios';
 import { transformImgUrl, collectionForVo } from '../lib/common';
 import GoodsItem from '../components/goods-item';
 import ChooseUnit from '../components/choose-unit';
 
-/* eslint-disable no-bitwise */
-const randomColor = () => Array.from({ length: 6 }).reduce(val => val + (Math.random() * 16 | 0).toString(16), '#');
+const styles = StyleSheet.create({
+    topNav: {
+        position: 'absolute',
+        zIndex: 1,
+        top: isIphoneX ? 45 : StatusBar.currentHeight + 5,
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10
+    },
+    fullTopNav: {
+        top: 0,
+        paddingTop: isIphoneX ? 45 : StatusBar.currentHeight + 3,
+        paddingBottom: 5,
+        backgroundColor: '#FFF'
+    },
+    navRadiusBtn: {
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        borderRadius: 50
+    },
+    navBtn: {
+        height: 30,
+        width: 30,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    navTab: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: 100
+    },
+    navTabLabel: {
+        paddingBottom: 5
+    },
+    navTabLabelActive: {
+        color: '#FF6347',
+        borderBottomWidth: 1,
+        borderBottomColor: '#FF6347'
+    }
+});
 
 @inject('ShoppingCartStore')
 @observer
@@ -29,11 +68,16 @@ class ProductDetail extends Component {
         goodsId: 0
     }
 
+    // banner图片 + margin + 商品选择 + margin - 导航栏(导航栏高度 + 3 + paddingBottom + 图标高度)
+    detailY = 400 + 15 + 80 + 15 - (StatusBar.currentHeight + 3 + 5 + 30)
+
     state = {
         goods: {},
         item: {},
         loaded: false,
-        chooseUnitShow: false
+        chooseUnitShow: false,
+        opacity: 1,
+        activeTab: 1
     }
 
     componentDidMount () {
@@ -53,7 +97,7 @@ class ProductDetail extends Component {
 
     @computed get detail () {
         const { goods } = this.state;
-        return goods.detail || '';
+        return goods.detail || '<div/>';
     }
 
     chooseHandler = () => {
@@ -63,6 +107,19 @@ class ProductDetail extends Component {
     closeChoose = () => {
         this.setState({ chooseUnitShow: false });
     }
+
+    scrollHandler = (e) => {
+        const { nativeEvent: { contentOffset: { y } } } = e;
+        if (y >= this.detailY) {
+            this.setState({ activeTab: 2 });
+        } else {
+            this.setState({ opacity: (100 - y) / 100, activeTab: 1 });
+        }
+    }
+
+    scrollToTop = () => this.scroll.scrollTo({ y: 0, animated: true })
+
+    scrollToDetail = () => this.scroll.scrollTo({ y: this.detailY, animated: true })
 
     async load () {
         const { goodsId } = this.props;
@@ -96,60 +153,49 @@ class ProductDetail extends Component {
 
     render () {
         const {
-            item, chooseUnitShow, goods, loaded
+            item, chooseUnitShow, goods, loaded, opacity, activeTab
         } = this.state;
         return (
             <View style={{ flex: 1 }}>
-                <View style={{
-                    position: 'absolute',
-                    top: isIphoneX ? 45 : StatusBar.currentHeight + 5,
-                    // backgroundColor: 'transparent',
-                    width: '100%',
-                    zIndex: 1
-                }}
-                >
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                        <TouchableOpacity
-                            onPress={Actions.pop}
-                            style={{
-                                backgroundColor: 'rgba(0,0,0,0.5)',
-                                borderRadius: 50,
-                                height: 30,
-                                width: 30,
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}
-                        >
-                            <Icon name="ios-arrow-back" size={22} color="#FFF" />
-                        </TouchableOpacity>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity style={{
-                                backgroundColor: 'rgba(0,0,0,0.5)',
-                                borderRadius: 50,
-                                height: 30,
-                                width: 30,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                marginRight: 15
-                            }}
-                            >
-                                <Icon name="ios-cart" size={22} color="#FFF" />
+                {
+                    opacity > 0 ? (
+                        <View style={[styles.topNav, { opacity }]}>
+                            <TouchableOpacity onPress={Actions.pop} style={[styles.navBtn, styles.navRadiusBtn]}>
+                                <Icon name="ios-arrow-back" size={22} color="#FFF" />
                             </TouchableOpacity>
-                            <TouchableOpacity style={{
-                                backgroundColor: 'rgba(0,0,0,0.5)',
-                                borderRadius: 50,
-                                height: 30,
-                                width: 30,
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}
-                            >
-                                <Icon name="ios-more" size={22} color="#FFF" />
-                            </TouchableOpacity>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity style={[styles.navBtn, styles.navRadiusBtn, { marginRight: 15 }]}>
+                                    <Icon name="ios-cart" size={22} color="#FFF" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.navBtn, styles.navRadiusBtn]}>
+                                    <Icon name="ios-more" size={22} color="#FFF" />
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                </View>
-                <ScrollView>
+                    ) : <View />
+                }
+                {
+                    opacity < 1 ? (
+                        <View style={[styles.topNav, styles.fullTopNav, { opacity: 1 - opacity }]}>
+                            <TouchableOpacity onPress={Actions.pop} style={[styles.navBtn]}>
+                                <Icon name="ios-arrow-back" size={22} />
+                            </TouchableOpacity>
+                            <View style={[styles.navTab]}>
+                                <Text onPress={this.scrollToTop} style={[styles.navTabLabel, activeTab === 1 && styles.navTabLabelActive]}>宝贝</Text>
+                                <Text onPress={this.scrollToDetail} style={[styles.navTabLabel, activeTab === 2 && styles.navTabLabelActive]}>详情</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity style={[styles.navBtn, { marginRight: 15 }]}>
+                                    <Icon name="ios-cart" size={22} />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.navBtn]}>
+                                    <Icon name="ios-more" size={22} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    ) : <View />
+                }
+                <ScrollView onScroll={this.scrollHandler} ref={ref => this.scroll = ref}>
                     <SafeAreaView style={{ height: 400, backgroundColor: '#FFF' }}>
                         {
                             this.imgs && this.imgs.length
@@ -173,14 +219,7 @@ class ProductDetail extends Component {
                             <GoodsItem unit={item} onChoose={this.chooseHandler} />
                         </Placeholder.ImageContent>
                     </View>
-                    <View style={{ marginTop: 15 }}>
-                        {
-                            Array.from({ length: 6 }).map((item, i) => <View key={`${i}`} style={{ height: 50, backgroundColor: randomColor() }} />)
-                        }
-                    </View>
-                    <View style={{ backgroundColor: 'red', height: 500 }}>
-                        <WebView originWhitelist={['*']} source={{ html: this.detail }} />
-                    </View>
+                    <HTML style={{ marginTop: 15 }} html={this.detail} imagesMaxWidth={SCREEN_WIDTH} />
                 </ScrollView>
                 <ChooseUnit visible={chooseUnitShow} onClose={this.closeChoose} goods={goods} />
             </View>

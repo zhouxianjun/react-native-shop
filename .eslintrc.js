@@ -18,7 +18,9 @@ module.exports = {
         "__DEV__": true,
         "isIos": true,
         "isAndroid": true,
-        "isIphoneX": true
+        "isIphoneX": true,
+        "SCREEN_WIDTH": true,
+        "SCREEN_HEIGHT": true
     },
     "parser": "babel-eslint",
     "rules": {
