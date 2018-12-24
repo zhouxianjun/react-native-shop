@@ -4,10 +4,11 @@ import { Actions } from 'react-native-router-flux';
 import { Toast } from 'antd-mobile-rn';
 import { UserStore } from '../store';
 import HttpError from './HttpError';
+import { BASE_URL } from '../config';
 
 const DEFAULT_CONFIG = { showError: true, loading: false };
 
-axios.defaults.baseURL = process.env.BASE_URL;
+axios.defaults.baseURL = BASE_URL;
 console.log('BASE_URL:', axios.defaults.baseURL);
 axios.interceptors.request.use((config) => {
     const { session } = UserStore;

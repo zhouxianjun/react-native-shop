@@ -3,7 +3,6 @@
   "plugins": [
     ["@babel/plugin-proposal-decorators", { "legacy" : true }],
     "@babel/plugin-proposal-optional-chaining",
-    "transform-inline-environment-variables",
     ["import", { "libraryName": "antd-mobile-rn" }]
   ]
 }

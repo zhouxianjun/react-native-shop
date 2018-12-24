@@ -4,6 +4,12 @@
  * @param {Object | Array} vo 数据
  * @param {String} prefix 前缀
  */
+/**
+ * 转换图片地址
+ * @param {String} url 原地址
+ */
+import { IMG_ADDRESS } from '../config';
+
 export const collectionForVo = (vo, prefix, name) => {
     if (Array.isArray(vo)) {
         vo.forEach(v => collectionForVo(v, prefix));
@@ -38,8 +44,4 @@ export const ForceDecimal = (num, count = 2) => {
 
 export const ForceMoney = num => ForceDecimal(num / 100);
 
-/**
- * 转换图片地址
- * @param {String} url 原地址
- */
-export const transformImgUrl = url => `${process.env.IMG_ADDRESS}${url}`;
+export const transformImgUrl = url => `${IMG_ADDRESS}${url}`;
