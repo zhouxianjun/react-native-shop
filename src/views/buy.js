@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import { inject, observer } from 'mobx-react';
 import { computed } from 'mobx';
-import { TextareaItem } from 'antd-mobile-rn';
+import { TextareaItem } from '@ant-design/react-native';
 import GoodsItem from '../components/goods-item';
 import { ForceMoney } from '../lib/common';
 

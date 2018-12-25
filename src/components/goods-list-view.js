@@ -82,7 +82,7 @@ class GoodsListView extends Component {
         }
         const { category } = this.props;
         this.setState({ refreshState: force ? RefreshState.HeaderRefreshing : RefreshState.FooterRefreshing });
-        const result = await get('/api/shop/index/goods', { category, pageNum: this.pageNum, pageSize: this.pageSize });
+        const result = await get('/api/shop/index/goods', { category, pageNum: this.pageNum, pageSize: this.pageSize }, { loading: 'loading...' });
         if (result.success) {
             this.pageNum += 1;
             this.setState({ refreshState: !result.value || result.value.isLastPage ? RefreshState.NoMoreData : RefreshState.Idle });

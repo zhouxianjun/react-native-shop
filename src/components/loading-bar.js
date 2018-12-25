@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
-import { Progress } from 'antd-mobile-rn';
+import { Progress } from '@ant-design/react-native';
 
 export default class LoadingBar extends PureComponent {
     constructor (props) {

@@ -8,7 +8,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "antd-mobile-rn": "^2.3.1",
+    "@ant-design/react-native": "^3.0.3",
     "axios": "^0.18.0",
     "lodash.merge": "^4.6.1",
     "mobx": "^5.7.0",
@@ -16,6 +16,7 @@
     "prop-types": "^15.6.2",
     "react": "16.6.1",
     "react-native": "0.57.7",
+    "react-native-code-push": "^5.5.1",
     "react-native-htmlview": "^0.13.0",
     "react-native-img-cache": "^1.6.0",
     "react-native-refresh-list-view": "^1.0.10",

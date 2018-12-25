@@ -1,8 +1,9 @@
-import { SearchBar } from 'antd-mobile-rn';
+import { SearchBar } from '@ant-design/react-native';
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
+import codePush from 'react-native-code-push';
 import {
-    FlatList, StyleSheet, Text, TouchableOpacity, View
+    FlatList, StyleSheet, Text, TouchableOpacity, View, Alert
 } from 'react-native';
 import { get } from '../lib/axios';
 import GoodsListView from '../components/goods-list-view';
@@ -57,7 +58,7 @@ class Home extends Component {
         const { currentCate, categorys } = this.state;
         return (
             <View style={{ flex: 1 }}>
-                <SearchBar placeholder="搜索" />
+                <SearchBar placeholder="搜索" styles={{ search: { top: 10, height: 20, width: 20 } }} />
                 <View style={{ flexDirection: 'row', flex: 1 }}>
                     <View style={{ backgroundColor: '#F5F5F5', marginRight: 8 }}>
                         <FlatList

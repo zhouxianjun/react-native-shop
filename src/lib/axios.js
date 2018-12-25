@@ -1,7 +1,7 @@
 import axios from 'axios';
 import merge from 'lodash.merge';
 import { Actions } from 'react-native-router-flux';
-import { Toast } from 'antd-mobile-rn';
+import { Toast, Portal } from '@ant-design/react-native';
 import { UserStore } from '../store';
 import HttpError from './HttpError';
 import { BASE_URL } from '../config';
@@ -33,33 +33,19 @@ axios.interceptors.response.use(async (res) => {
 
 export const fetch = async (url, config = DEFAULT_CONFIG) => {
     const { showError, loading } = config;
+    let loadingToast;
     try {
         if (!url) {
             throw new Error('url must be not null');
         }
-        if (global.LoadingBar) {
-            global.LoadingBar.start();
-        }
         if (loading !== false) {
-            Toast.loading(loading, 0);
+            loadingToast = Toast.loading(typeof loading === 'boolean' ? '加载中...' : loading, 0);
         }
         const response = await axios(url, config);
-        if (global.LoadingBar) {
-            global.LoadingBar.finish();
-        }
-        if (loading !== false) {
-            Toast.hide();
-        }
         console.log(url, config, response);
         return response;
     } catch (err) {
         console.warn(err);
-        if (global.LoadingBar) {
-            global.LoadingBar.error();
-        }
-        if (loading !== false) {
-            Toast.hide();
-        }
         if (showError) {
             Toast.fail(err.message);
             console.warn(err.message);
@@ -71,6 +57,10 @@ export const fetch = async (url, config = DEFAULT_CONFIG) => {
             Actions.login();
         }
         return { success: false };
+    } finally {
+        if (loadingToast) {
+            Portal.remove(loadingToast);
+        }
     }
 };
 

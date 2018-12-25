@@ -77,6 +77,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -101,8 +102,8 @@ android {
         applicationId "com.shop"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.2"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -128,10 +129,22 @@ android {
         }
     }
     buildTypes {
-        release {
+        debug{
+            buildConfigField "String", "CODEPUSH_KEY", '""'
+        }
+        releaseStaging {
             minifyEnabled enableProguardInReleaseBuilds
+            matchingFallbacks = ['release', 'debug']
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+            buildConfigField "String", "CODEPUSH_KEY", '"KwqJNGcY3OHopvfTxkj4c_aqmQ-Ge563132a-0182-42be-b3d8-79d8385fad1a"'
+        }
+        release {
+            minifyEnabled enableProguardInReleaseBuilds
+            matchingFallbacks = ['release', 'debug']
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
+            buildConfigField "String", "CODEPUSH_KEY", '"RDOddR3_yWFzmk1XWLuGpSoI8Dbte563132a-0182-42be-b3d8-79d8385fad1a"'
         }
     }
     // applicationVariants are e.g. debug, release
@@ -156,6 +169,7 @@ configurations.all {
 }
 
 dependencies {
+    compile project(':react-native-code-push')
     compile project(':react-native-splash-screen')
     compile project(':rn-fetch-blob')
     compile project(':react-native-vector-icons')

@@ -5,7 +5,7 @@ import {
 import { TouchableOpacity, StatusBar } from 'react-native';
 import { inject } from 'mobx-react';
 import PropTypes from 'prop-types';
-import { Toast } from 'antd-mobile-rn';
+import { Toast } from '@ant-design/react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import SplashScreen from 'react-native-splash-screen';
 

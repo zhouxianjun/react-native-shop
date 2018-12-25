@@ -5,7 +5,7 @@ import {
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { computed, reaction } from 'mobx';
-import { Modal } from 'antd-mobile-rn';
+import { Modal } from '@ant-design/react-native';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import NumberInput from './number-input';
 import { ForceMoney, transformImgUrl } from '../lib/common';

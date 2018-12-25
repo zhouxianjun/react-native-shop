@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import UserAvatar from 'react-native-user-avatar';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import { Card } from 'antd-mobile-rn';
+import { Card } from '@ant-design/react-native';
 
 export default function () {
     return (
@@ -18,14 +18,14 @@ export default function () {
                 <Card.Header title="我的订单" style={{ height: 40 }}></Card.Header>
                 <Card.Body>
                     <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
-                        <View style={{ flex: 1, alignItems: 'center' }}>
+                        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }}>
                             <Icon name="list-alt" size={50} />
                             <Text>全部订单</Text>
-                        </View>
-                        <View style={{ flex: 1, alignItems: 'center' }}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }}>
                             <Icon name="bars" size={50} />
                             <Text>代支付</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </Card.Body>
             </Card>

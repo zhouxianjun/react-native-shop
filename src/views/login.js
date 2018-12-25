@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { InputItem, List, Button } from 'antd-mobile-rn';
+import { InputItem, List, Button } from '@ant-design/react-native';
 import { inject } from 'mobx-react';
 import { Actions } from 'react-native-router-flux';
 
