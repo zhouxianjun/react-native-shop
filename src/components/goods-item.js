@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
-    View, Text, TouchableOpacity, Image
+    View, Text, TouchableOpacity
 } from 'react-native';
-// import { CachedImage } from 'react-native-img-cache';
+import { CachedImage } from 'react-native-img-cache';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -98,7 +98,7 @@ class GoodsItem extends Component {
             }}
             >
                 <TouchableOpacity style={{ marginRight: 10 }} onPress={this.goDetail}>
-                    <Image
+                    <CachedImage
                         source={{ uri: this.picture }}
                         resizeMode="contain"
                         style={{ height: 60, width: 60 }}

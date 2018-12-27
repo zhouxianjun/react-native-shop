@@ -1,4 +1,6 @@
-import { Dimensions, PixelRatio, Platform } from 'react-native';
+import {
+    Dimensions, PixelRatio, Platform, StatusBar
+} from 'react-native';
 
 const { height, width } = Dimensions.get('window');
 // iPhoneX
@@ -17,3 +19,11 @@ global.isIphoneX = Platform.OS === 'ios'
     || (global.SCREEN_HEIGHT === X_WIDTH && global.SCREEN_WIDTH === X_HEIGHT));
 // 获取屏幕分辨率
 global.PixelRatio = PixelRatio.get();
+// 状态栏高度
+if (isIphoneX) {
+    global.statusBarHeight = 45;
+} else if (isIos) {
+    global.statusBarHeight = 30;
+} else {
+    global.statusBarHeight = StatusBar.currentHeight + 5;
+}

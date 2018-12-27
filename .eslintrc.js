@@ -20,7 +20,8 @@ module.exports = {
         "isAndroid": true,
         "isIphoneX": true,
         "SCREEN_WIDTH": true,
-        "SCREEN_HEIGHT": true
+        "SCREEN_HEIGHT": true,
+        "statusBarHeight": true
     },
     "parser": "babel-eslint",
     "rules": {
