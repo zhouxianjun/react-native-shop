@@ -17,11 +17,12 @@ class ChooseUnit extends Component {
         visible: PropTypes.bool,
         onClose: PropTypes.func,
         goods: PropTypes.object.isRequired,
-        ShoppingCartStore: PropTypes.object.isRequired
+        ShoppingCartStore: PropTypes.any
     }
 
     static defaultProps = {
         visible: false,
+        ShoppingCartStore: {},
         onClose: () => {}
     }
 

@@ -1,9 +1,8 @@
 import { SearchBar } from '@ant-design/react-native';
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
-import codePush from 'react-native-code-push';
 import {
-    FlatList, StyleSheet, Text, TouchableOpacity, View, Alert
+    FlatList, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import { get } from '../lib/axios';
 import GoodsListView from '../components/goods-list-view';

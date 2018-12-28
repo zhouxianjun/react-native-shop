@@ -18,11 +18,12 @@ class GoodsItem extends Component {
         unit: PropTypes.object.isRequired,
         onChoose: PropTypes.func,
         edit: PropTypes.bool,
-        ShoppingCartStore: PropTypes.object.isRequired
+        ShoppingCartStore: PropTypes.any
     }
 
     static defaultProps = {
         edit: true,
+        ShoppingCartStore: {},
         onChoose: () => {}
     }
 

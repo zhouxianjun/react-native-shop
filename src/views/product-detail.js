@@ -15,7 +15,7 @@ import { get } from '../lib/axios';
 import { transformImgUrl, collectionForVo } from '../lib/common';
 import GoodsItem from '../components/goods-item';
 import ChooseUnit from '../components/choose-unit';
-import ScrollSwithNavView from '../components/scroll-switch-nav-view';
+import ScrollSwitchNavView from '../components/scroll-switch-nav-view';
 
 const styles = StyleSheet.create({
     topNav: {
@@ -68,9 +68,6 @@ class ProductDetail extends Component {
         loaded: false,
         chooseUnitShow: false
     }
-
-    // banner图片 + margin + 商品选择 + margin - 导航栏(导航栏高度 + paddingBottom + 图标高度)
-    detailY = 400 + 15 + 80 + 15 - (statusBarHeight + 5 + 30)
 
     componentDidMount () {
         this.load();
@@ -139,7 +136,7 @@ class ProductDetail extends Component {
             item, chooseUnitShow, goods, loaded
         } = this.state;
         return (
-            <ScrollSwithNavView
+            <ScrollSwitchNavView
                 ref={ref => this.navView = ref}
                 navs={[{
                     isShow: y => y < 100,
@@ -209,7 +206,7 @@ class ProductDetail extends Component {
                 </View>
                 <HTML style={{ marginTop: 15 }} html={this.detail} imagesMaxWidth={SCREEN_WIDTH} />
                 <ChooseUnit visible={chooseUnitShow} onClose={this.closeChoose} goods={goods} />
-            </ScrollSwithNavView>
+            </ScrollSwitchNavView>
         );
     }
 }
