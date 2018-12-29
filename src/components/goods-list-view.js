@@ -26,6 +26,8 @@ class GoodsListView extends Component {
 
     pageSize = 10;
 
+    changeListState = true
+
     state = {
         refreshState: RefreshState.EmptyData,
         chooseUnitShow: false,
@@ -38,7 +40,11 @@ class GoodsListView extends Component {
         reaction(() => {
             const { category } = this.props;
             return category;
-        }, this.refresh);
+        }, async () => {
+            this.changeListState = false;
+            await this.refresh();
+            this.changeListState = true;
+        });
     }
 
     @computed get shoppingCart () {
@@ -82,7 +88,9 @@ class GoodsListView extends Component {
             this.setState({ list: [] });
         }
         const { category } = this.props;
-        this.setState({ refreshState: force ? RefreshState.HeaderRefreshing : RefreshState.FooterRefreshing });
+        if (this.changeListState) {
+            this.setState({ refreshState: force ? RefreshState.HeaderRefreshing : RefreshState.FooterRefreshing });
+        }
         const result = await get('/api/shop/index/goods', { category, pageNum: this.pageNum, pageSize: this.pageSize }, { loading: 'loading...' });
         if (result.success) {
             this.pageNum += 1;
