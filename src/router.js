@@ -17,7 +17,6 @@ import ProductDetail from './views/product-detail';
 import ShoppingCartView from './views/shopping-cart';
 import Buy from './views/buy';
 import BuySubmit from './components/buy-submit';
-import ShoppingCart from './components/shopping-cart';
 
 @inject('UserStore')
 class RootRouter extends Component {
@@ -74,40 +73,31 @@ class RootRouter extends Component {
                 <Scene key="root" hideNavBar headerMode="screen">
                     <Scene component={Launch} on={this.isLogin} success="app" failure="login" />
                     <Stack key="app" type={ActionConst.RESET}>
-                        <Tabs
-                            key="appTabs"
+                        <Scene
+                            key="home"
+                            component={Home}
+                            tabs
+                            title="首页"
+                            on={this.enterHome}
+                            renderRightButton={() => (
+                                <TouchableOpacity onPress={Actions.user}>
+                                    <Icon style={{ marginRight: 10 }} name="user" size={18} />
+                                </TouchableOpacity>
+                            )}
+                        />
+                        <Overlay
+                            key="shoppingCart"
+                            back
+                            title="购物车"
+                            component={ShoppingCartView}
+                        />
+                        <Scene
                             hideNavBar
-                            tabBarComponent={ShoppingCart}
-                        >
-                            <Stack key="appTabsStack">
-                                <Scene
-                                    key="home"
-                                    component={Home}
-                                    tabs
-                                    title="首页"
-                                    on={this.enterHome}
-                                    renderRightButton={() => (
-                                        <TouchableOpacity onPress={Actions.user}>
-                                            <Icon style={{ marginRight: 10 }} name="user" size={18} />
-                                        </TouchableOpacity>
-                                    )}
-                                />
-                                <Overlay
-                                    key="shoppingCart"
-                                    back
-                                    title="购物车"
-                                    component={ShoppingCartView}
-                                />
-                                <Scene
-                                    hideNavBar
-                                    key="productDetail"
-                                    component={ProductDetail}
-                                    title="详情"
-                                    on={this.enterGoodsDetail}
-                                />
-                            </Stack>
-                        </Tabs>
-
+                            key="productDetail"
+                            component={ProductDetail}
+                            title="详情"
+                            on={this.enterGoodsDetail}
+                        />
                         <Scene
                             key="user"
                             component={User}

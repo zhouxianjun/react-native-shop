@@ -8,6 +8,7 @@ import GoodsItem from './goods-item';
 import ChooseUnit from './choose-unit';
 import { get } from '../lib/axios';
 import { collectionForVo } from '../lib/common';
+import ShoppingCart from './shopping-cart';
 
 @inject(['ShoppingCartStore'])
 @observer
@@ -85,7 +86,6 @@ class GoodsListView extends Component {
         const result = await get('/api/shop/index/goods', { category, pageNum: this.pageNum, pageSize: this.pageSize }, { loading: 'loading...' });
         if (result.success) {
             this.pageNum += 1;
-            this.setState({ refreshState: !result.value || result.value.isLastPage ? RefreshState.NoMoreData : RefreshState.Idle });
             const data = result.value.list || [];
             collectionForVo(data, 'unit');
             data.forEach(item => Reflect.set(item, 'units', item.units
@@ -101,7 +101,9 @@ class GoodsListView extends Component {
                 .sort((a, b) => a.price - b.price)));
 
             const { list } = this.state;
-            this.setState({ list: [...list, ...data || []] });
+
+            const refreshState = !result.value || result.value.isLastPage ? RefreshState.NoMoreData : RefreshState.Idle;
+            this.setState({ list: [...list, ...data || []], refreshState });
         } else {
             this.setState({ refreshState: RefreshState.Failure });
         }
@@ -119,7 +121,7 @@ class GoodsListView extends Component {
                     refreshState={refreshState}
                     onHeaderRefresh={this.refresh}
                     onFooterRefresh={this.pull}
-                    footerNoMoreDataComponent={<View />}
+                    footerNoMoreDataComponent={<View style={{ height: ShoppingCart.offsetHeight }} />}
                     ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#ddd' }} />}
                     keyExtractor={item => `goods-${item.goodsId}`}
                     renderItem={({ item }) => <GoodsItem unit={item} onChoose={this.chooseHandler} />}

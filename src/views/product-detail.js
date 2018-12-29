@@ -16,6 +16,7 @@ import { transformImgUrl, collectionForVo } from '../lib/common';
 import GoodsItem from '../components/goods-item';
 import ChooseUnit from '../components/choose-unit';
 import ScrollSwitchNavView from '../components/scroll-switch-nav-view';
+import ShoppingCart from '../components/shopping-cart';
 
 const styles = StyleSheet.create({
     topNav: {
@@ -136,77 +137,80 @@ class ProductDetail extends Component {
             item, chooseUnitShow, goods, loaded
         } = this.state;
         return (
-            <ScrollSwitchNavView
-                ref={ref => this.navView = ref}
-                navs={[{
-                    isShow: y => y < 100,
-                    key: 'one',
-                    component: y => (
-                        <View style={[styles.topNav, { opacity: (100 - y) / 100 }]}>
-                            <TouchableOpacity onPress={Actions.pop} style={[styles.navBtn, styles.navRadiusBtn]}>
-                                <Icon name="ios-arrow-back" size={22} color="#FFF" />
-                            </TouchableOpacity>
-                            <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity style={[styles.navBtn, styles.navRadiusBtn, { marginRight: 15 }]}>
-                                    <Icon name="ios-cart" size={22} color="#FFF" />
+            <View>
+                <ScrollSwitchNavView
+                    ref={ref => this.navView = ref}
+                    navs={[{
+                        isShow: y => y < 100,
+                        key: 'one',
+                        component: y => (
+                            <View style={[styles.topNav, { opacity: (100 - y) / 100 }]}>
+                                <TouchableOpacity onPress={Actions.pop} style={[styles.navBtn, styles.navRadiusBtn]}>
+                                    <Icon name="ios-arrow-back" size={22} color="#FFF" />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={[styles.navBtn, styles.navRadiusBtn]}>
-                                    <Icon name="ios-more" size={22} color="#FFF" />
-                                </TouchableOpacity>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <TouchableOpacity style={[styles.navBtn, styles.navRadiusBtn, { marginRight: 15 }]}>
+                                        <Icon name="ios-cart" size={22} color="#FFF" />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={[styles.navBtn, styles.navRadiusBtn]}>
+                                        <Icon name="ios-more" size={22} color="#FFF" />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
-                    )
-                }, {
-                    isShow: y => (100 - y) / 100 < 1,
-                    key: 'two',
-                    style: y => ({ backgroundColor: '#FFF', opacity: (y > 100 ? 100 : y) / 100 }),
-                    component: y => (
-                        <View style={[styles.topNav]}>
-                            <TouchableOpacity onPress={Actions.pop} style={[styles.navBtn]}>
-                                <Icon name="ios-arrow-back" size={22} />
-                            </TouchableOpacity>
-                            <View style={[styles.navTab]}>
-                                <Text onPress={this.scrollToTop} style={[styles.navTabLabel, y < this.detailY && styles.navTabLabelActive]}>宝贝</Text>
-                                <Text onPress={this.scrollToDetail} style={[styles.navTabLabel, y >= this.detailY && styles.navTabLabelActive]}>详情</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity style={[styles.navBtn, { marginRight: 15 }]}>
-                                    <Icon name="ios-cart" size={22} />
+                        )
+                    }, {
+                        isShow: y => (100 - y) / 100 < 1,
+                        key: 'two',
+                        style: y => ({ backgroundColor: '#FFF', opacity: (y > 100 ? 100 : y) / 100 }),
+                        component: y => (
+                            <View style={[styles.topNav]}>
+                                <TouchableOpacity onPress={Actions.pop} style={[styles.navBtn]}>
+                                    <Icon name="ios-arrow-back" size={22} />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={[styles.navBtn]}>
-                                    <Icon name="ios-more" size={22} />
-                                </TouchableOpacity>
+                                <View style={[styles.navTab]}>
+                                    <Text onPress={this.scrollToTop} style={[styles.navTabLabel, y < this.detailY && styles.navTabLabelActive]}>宝贝</Text>
+                                    <Text onPress={this.scrollToDetail} style={[styles.navTabLabel, y >= this.detailY && styles.navTabLabelActive]}>详情</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <TouchableOpacity style={[styles.navBtn, { marginRight: 15 }]}>
+                                        <Icon name="ios-cart" size={22} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={[styles.navBtn]}>
+                                        <Icon name="ios-more" size={22} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
-                    )
-                }]}
-            >
-                <SafeAreaView style={{ height: 400, backgroundColor: '#FFF' }}>
-                    {
-                        this.imgs && this.imgs.length
-                            ? (
-                                <Swiper showsButtons autoplay>
-                                    {
-                                        this.imgs.map(img => <CachedImage key={img} source={{ uri: img }} style={{ height: 400 }} resizeMode="contain" />)
-                                    }
-                                </Swiper>
-                            ) : <View />
-                    }
-                </SafeAreaView>
-                <View style={{ marginTop: 15, backgroundColor: '#FFF' }}>
-                    <Placeholder.ImageContent
-                        size={60}
-                        animate="fade"
-                        lineNumber={3}
-                        lastLineWidth="30%"
-                        onReady={loaded}
-                    >
-                        <GoodsItem unit={item} onChoose={this.chooseHandler} />
-                    </Placeholder.ImageContent>
-                </View>
-                <HTML style={{ marginTop: 15 }} html={this.detail} imagesMaxWidth={SCREEN_WIDTH} />
+                        )
+                    }]}
+                >
+                    <SafeAreaView style={{ height: 400, backgroundColor: '#FFF' }}>
+                        {
+                            this.imgs && this.imgs.length
+                                ? (
+                                    <Swiper showsButtons autoplay>
+                                        {
+                                            this.imgs.map(img => <CachedImage key={img} source={{ uri: img }} style={{ height: 400 }} resizeMode="contain" />)
+                                        }
+                                    </Swiper>
+                                ) : <View />
+                        }
+                    </SafeAreaView>
+                    <View style={{ marginTop: 15, backgroundColor: '#FFF' }}>
+                        <Placeholder.ImageContent
+                            size={60}
+                            animate="fade"
+                            lineNumber={3}
+                            lastLineWidth="30%"
+                            onReady={loaded}
+                        >
+                            <GoodsItem unit={item} onChoose={this.chooseHandler} />
+                        </Placeholder.ImageContent>
+                    </View>
+                    <HTML containerStyle={{ marginTop: 15, marginBottom: ShoppingCart.offsetHeight }} html={this.detail} imagesMaxWidth={SCREEN_WIDTH} />
+                </ScrollSwitchNavView>
                 <ChooseUnit visible={chooseUnitShow} onClose={this.closeChoose} goods={goods} />
-            </ScrollSwitchNavView>
+                <ShoppingCart />
+            </View>
         );
     }
 }

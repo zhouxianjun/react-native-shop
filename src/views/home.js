@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { get } from '../lib/axios';
 import GoodsListView from '../components/goods-list-view';
+import ShoppingCart from '../components/shopping-cart';
 
 const styles = StyleSheet.create({
     cateItem: {
@@ -64,6 +65,7 @@ class Home extends Component {
                             data={categorys}
                             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#eee' }} />}
                             keyExtractor={item => `cate-${item.id}`}
+                            ListFooterComponent={<View style={{ height: ShoppingCart.offsetHeight }} />}
                             renderItem={({ item }) => (
                                 <TouchableOpacity
                                     style={[styles.cateItem, currentCate === item.id ? styles.cateItemSelect : { backgroundColor: 'white' }]}
@@ -80,6 +82,7 @@ class Home extends Component {
                         />
                     </View>
                 </View>
+                <ShoppingCart />
             </View>
         );
     }
